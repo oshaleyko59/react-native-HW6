@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
-import { useAuthContext } from "../store/auth-context";
+//import { useAuthContext } from "../store/auth-context";
 import LoginScreen from "../Screens/Auth/LoginScreen";
 import RegistrationScreen from "../Screens/Auth/RegistrationScreen";
 import HomeScreen from "../Screens/Protected/HomeScreen";
@@ -83,11 +83,12 @@ export function useStackNavigator() {
 	//NB! transferring isLoading down here in props allowed
 	//to get rid of error of inconsistent use of hooks
 	function getStackNavigator(isLoading) {
-		const { isAuthenticated, logout } = useAuthContext();
+		//const { isAuthenticated, logout } = useAuthContext();
 		/* console.debug(
 			`getStackNavigator>>isAuthenticated=${isAuthenticated}/isLoading=${isLoading}`
 		); */
-
+		const isAuthenticated = true; //FIXME:
+		const logout = () => {}; //FIXME:
 		return isLoading ? (
 			<Busy />
 		) : isAuthenticated ? (

@@ -19,6 +19,7 @@ import MainBtn from "../ui/MainBtn";
 import TrashBtn from "../ui/TrashBtn";
 import { COLORS } from "../../common/constants";
 import ImageTaker from "./ImageTaker";
+import { storePost } from "../../utils/http";
 
 //TODO: verify both camera and location permissions at the beginning? here..,
 
@@ -74,8 +75,9 @@ export default function PostForm() {
 
 		const newPost = { title, place, location, picture, comments: [] };
 
-		console.info("Publish>>post", newPostReady, newPost); //TODO: upload
+    console.info("Publish>>post", newPostReady, newPost);
 
+    storePost(newPost); //TODO: upload
 		clearPost();
 		navigation.navigate("Home");
 	}

@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-import { useAuthContext } from "../../store/auth-context";
+//import { useAuthContext } from "../../store/auth-context";
 import PostsScreen from "./Tabs/PostsScreen";
 import ProfileScreen from "./Tabs/ProfileScreen";
 import CreatePostScreen from "./Tabs/CreatePostScreen";
@@ -28,8 +28,9 @@ box-shadow: 0px 0.5px 0px 0px rgba(0, 0, 0, 0.30);
 backdrop-filter: blur(13.591408729553223px);
 */
 export default function HomeScreen({ navigation }) {
-	const { logout } = useAuthContext();
-
+	//const { logout } = useAuthContext();
+  const logout = () => { }; //FIXME:
+  
 	return (
 		<BottomTab.Navigator
 			initialRouteName="Posts"

@@ -1,16 +1,17 @@
 import { useState, useLayoutEffect } from "react";
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { Provider } from "react-redux";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { useStackNavigator } from "./src/hooks/useStackNavigator";
 
-import AuthContextProvider, { useAuthContext } from "./src/store/auth-context";
+//import AuthContextProvider, { useAuthContext } from "./src/store/auth-context";
 import Loading from "./src/components/ui/Loading";
+import { store } from "./src/store/store";
 
 function Root() {
-	const { authenticate } = useAuthContext();
+	//const { authenticate } = useAuthContext();
 	const [isLoading, setIsLoading] = useState(true);
 	const { getStackNavigator } = useStackNavigator();
 
@@ -21,9 +22,9 @@ function Root() {
 
 				if (!storedUser) {
 					return null;
-        }
-        const user = JSON.parse(storedUser);
-				authenticate(user);
+				}
+				const user = JSON.parse(storedUser);
+				//FIXME: authenticate(user);
 			} catch (e) {
 				console.error("fetchUser>> ERROR", e.message);
 			} finally {
@@ -48,11 +49,13 @@ export default function App() {
 
 	if (!fontsLoaded) {
 		return <Loading msg="Loading..." />;
-  }
+	}
+
+	//<AuthContextProvider></AuthContextProvider>
 
 	return (
-		<AuthContextProvider>
+		<Provider store={store}>
 			<Root />
-		</AuthContextProvider>
+		</Provider>
 	);
 }
