@@ -13,8 +13,7 @@ import { bkgImage } from "../../common/constants";
 
 function AuthContent({ modeLogin, onAuthenticate }) {
 	function submitHandler(credentials) {
-		//TODO:	validate here??? let { name, email, password } = credentials;
-		onAuthenticate(credentials); //{ name, email, password }
+		onAuthenticate(credentials);
 	}
 
 	return (

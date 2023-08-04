@@ -1,33 +1,13 @@
-import { useState } from 'react';
-import { Alert } from 'react-native';
+import { useDispatch } from "react-redux";
 
-import AuthContent from '../../components/auth/AuthContent';
-import Loading from '../../components/ui/Loading';
-//import { useAuthContext } from '../../store/auth-context';
+import AuthContent from "../../components/auth/AuthContent";
+import authOperations from "../../utils/auth";
 
 function LoginScreen() {
-	const [isBusy, setIsBusy] = useState(false);
+  const dispatch = useDispatch();
 
-	//const {authenticate} = useAuthContext();
-  const authenticate = () => { } //FIXME:
-  
 	async function loginHandler({ email, password }) {
-		setIsBusy(true);
-		try {
-			authenticate({ email, password });
-		} catch (error) {
-			console.error("error", error);
-			Alert.alert(
-				"Authentication failed!",
-				"Could not log you in. Please check your credentials!"
-			);
-		} finally {
-			setIsBusy(false);
-		}
-	}
-
-	if (isBusy) {
-		return <Loading msg="Logging you in..." />;
+    dispatch(authOperations.login({ email, password }));
 	}
 
 	return <AuthContent modeLogin={true} onAuthenticate={loginHandler} />;

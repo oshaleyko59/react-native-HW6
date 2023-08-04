@@ -1,37 +1,14 @@
-import { useState } from "react";
-import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 
 import AuthContent from "../../components/auth/AuthContent";
-import Loading from "../../components/ui/Loading";
-import { authRegister } from "../../store/auth/authOperations";
-
-//import { useAuthContext } from "../../store/auth-context";
+import authOperations from "../../utils/auth";
 
 function RegistrationScreen() {
-  const [isBusy, setIsBusy] = useState(false);
-
-	const dispatch = useDispatch();
-
-	//const { authenticate } = useAuthContext();
-
+  const dispatch = useDispatch();
+  
 	async function signupHandler({ name, email, password }) {
-		setIsBusy(true);
-		try {
-      dispatch(authRegister({ name, email, password }));  //authenticate({ name, email, password });
-		} catch (error) {
-			Alert.alert(
-				"Authentication failed",
-				"Could not create user, please check your input."
-			);
-		} finally {
-			setIsBusy(false);
-		}
-	}
-
-	if (isBusy) {
-		return <Loading msg="Logging you in..." />;
-	}
+		dispatch(authOperations.register({ email, password }));
+  }
 
 	return <AuthContent modeLogin={false} onAuthenticate={signupHandler} />;
 }

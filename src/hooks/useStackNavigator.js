@@ -2,7 +2,8 @@ import { StyleSheet, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
-//import { useAuthContext } from "../store/auth-context";
+import useAuth from "./useAuthentication";
+//import useAuth from "./useAuth";
 import LoginScreen from "../Screens/Auth/LoginScreen";
 import RegistrationScreen from "../Screens/Auth/RegistrationScreen";
 import HomeScreen from "../Screens/Protected/HomeScreen";
@@ -31,7 +32,9 @@ export function useStackNavigator() {
 	}
 
   function ProtectedStack({ onLogout }) {
-      const navigation = useNavigation();
+    const navigation = useNavigation();
+    const { isAuthenticated, user, token } = useAuth();
+    console.debug('ProtectedStack>>user',isAuthenticated, user, token);
 		return (
 			<MainStack.Navigator
 				screenOptions={{
@@ -82,21 +85,18 @@ export function useStackNavigator() {
 
 	//NB! transferring isLoading down here in props allowed
 	//to get rid of error of inconsistent use of hooks
-	function getStackNavigator(isLoading) {
-		//const { isAuthenticated, logout } = useAuthContext();
-		/* console.debug(
+  //function getStackNavigator(isLoading) {
+    function getStackNavigator(isAuthenticated) {
+			const { onLogout } = useAuth();
+			/* console.debug(
 			`getStackNavigator>>isAuthenticated=${isAuthenticated}/isLoading=${isLoading}`
 		); */
-		const isAuthenticated = true; //FIXME:
-		const logout = () => {}; //FIXME:
-		return isLoading ? (
-			<Busy />
-		) : isAuthenticated ? (
-			<ProtectedStack onLogout={logout} />
-		) : (
-			<AuthStack />
-		);
-	}
+			return isAuthenticated ? (
+				<ProtectedStack onLogout={onLogout} />
+			) : (
+				<AuthStack />
+			);
+		}
 
 	return { getStackNavigator };
 }

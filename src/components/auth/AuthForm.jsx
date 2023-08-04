@@ -22,13 +22,14 @@ function AuthForm({ modeLogin, onSubmit }) {
 		[height]
 	);
 
-	function submitHandler() {
-		onSubmit({
+  function submitHandler() {
+    onSubmit({
 			name,
 			email,
 			password,
-		});
-	}
+    });
+  }
+
 	const navigation = useNavigation();
 
 	function onAlternativePress() {
