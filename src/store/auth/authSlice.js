@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
-//import authOperations from "../../utils/auth";
-import authOperations from "../../store/auth/authOperations"; //TODO: ???
+import authOperations from "../../store/auth/authOperations";
 
 const isRejectedAction = (action) => {
 	return action.type.startsWith("auth/") && action.type.endsWith("rejected");
@@ -12,9 +11,8 @@ const isPendingAction = (action) => {
 };
 
 const initialState = {
-  user: { userId: null, email: null, userName: null }, //TODO: name
-	token: null,
-
+  user: { uid: null, email: null, displayName: null },
+  token: null,
 	isRefreshingUser: true,
 	errorMsg: "",
 };
@@ -26,20 +24,20 @@ const authSlice = createSlice({
 		builder
       .addCase(authOperations.register.fulfilled, (state, action) => {
 				console.debug('authOperations.register.fulfilled>>action.payload', action.payload);
-				state.user = action.payload.user;
-				state.token = action.payload.idToken;
+        state.user = action.payload.user;
+			  state.token = action.payload.token;
 			})
 			.addCase(authOperations.login.fulfilled, (state, action) => {
 				console.debug(
 					"authOperations.login.fulfilled>>action.payload",
 					action.payload
 				);
-				state.user = action.payload.user;
-				state.token = action.payload.idToken;
+        state.user = action.payload.user;
+				state.token = action.payload.token;
 			})
 			.addCase(authOperations.logout.fulfilled, (state) => {
-				state.user = { userId: null, email: null };
-				state.token = null;
+				state.user = { uid: null, email: null, accessToken:null };
+			  state.token = null;
 			})
 			.addCase(authOperations.fetchCurrentUser.fulfilled, (state, action) => {
 				state.user = action.payload;
@@ -50,14 +48,15 @@ const authSlice = createSlice({
 			})
 			.addCase(authOperations.fetchCurrentUser.rejected, (state, action) => {
 				state.isRefreshingUser = false;
-				state.token = null;
+				//state.token = null;
 			})
 			.addMatcher(isPendingAction, (state) => {
         state.errorMsg = "";
         state.token = null;
 			})
-			.addMatcher(isRejectedAction, (state, action) => {
-        const errm = 'Authentication failed! TODO:';  //transformErrorMsg(action.payload, action.type);
+      .addMatcher(isRejectedAction, (state, action) => {
+        console.log("isRejectedAction>>",action.error.message);
+        const errm = `Authentication failed! ${action.error.message}`;
 				state.errorMsg = errm;
 				if (errm) {
 					Alert.alert(errm);
@@ -66,5 +65,4 @@ const authSlice = createSlice({
 	},
 });
 
-//export actions TODO:?
 export default authSlice.reducer;

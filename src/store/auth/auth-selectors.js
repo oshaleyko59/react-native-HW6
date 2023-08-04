@@ -1,10 +1,10 @@
 const selectIsAuthenticated = (state) => {
-  console.debug(
+/*   console.debug(
 		"selectIsAuthenticated>>",
 		!!state.auth.token,
 		!state.auth.token,
 		state.auth.token
-	);
+	); */
   return !!state.auth.token;
 };
 const selectUser = (state) => state.auth.user;

@@ -16,8 +16,8 @@ function Root() {
 	const { isAuthenticated, refreshUser } = useAuth();
 	const { getStackNavigator } = useStackNavigator();
 
-	const user = auth.currentUser;
-  console.debug("auth.currentUser>>", user);
+	// const user = auth.currentUser;
+  // console.debug("auth.currentUser>>", user);
 
 
 	useLayoutEffect(() => {

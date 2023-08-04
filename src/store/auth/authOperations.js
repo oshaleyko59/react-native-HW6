@@ -5,10 +5,22 @@ import {
 	onAuthStateChanged,
 	updateProfile,
 	signOut,
+	AuthErrorCodes,
 } from "firebase/auth";
 import { auth } from "../../firebase/config";
 
-export const authStateChanged = async (onChange = () => {}) => {
+const transformErrorMsg = (error) => {
+	switch (error.code) {
+		case AuthErrorCodes.INVALID_EMAIL:
+			return "Invalid email";
+		case AuthErrorCodes.INVALID_PASSWORD:
+			return "Invalid password. Try again";
+		default:
+			return `${error.message}`;
+	}
+};
+
+const onUserStateChanged = async (onChange = () => {}) => {
 	onAuthStateChanged((user) => {
 		onChange(user);
 	});
@@ -36,7 +48,7 @@ const fetchCurrentUser = createAsyncThunk(
 			//thunkAPI.dispatch(fetchContacts());
 			return data;
 		} catch (error) {
-			const msg = transformErrorMsg(error.response);
+			const msg = transformErrorMsg(error);
 			return thunkAPI.rejectWithValue(msg);
 		} */
 	}
@@ -44,63 +56,74 @@ const fetchCurrentUser = createAsyncThunk(
 
 //register
 //export const authRegister = async ({ email, password }) => {
-  const register = createAsyncThunk(
+const register = createAsyncThunk(
 	"auth/register",
-  async (userData, thunkAPI) => {
-    const { email, password } = userData;
-	try {
-		const user = await auth.createUserWithEmailAndPassword(
-			auth,
-			email,
-			password
-		);
-		console.log("authRegister>>user", user);
-	} catch (e) {
-		console.error("authRegister>>error", e, e.message);
-		const msg = transformErrorMsg(e.response);
-		return thunkAPI.rejectWithValue(msg);
-	}
-});
+	async (userData, thunkAPI) => {
+		const { email, password } = userData;
+    try {
+      return authenticate("register", email, password);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
 
-/* //TODO: або більш короткий запис цієї функції
-const registerDB = ({ email, password }) =>
-        createUserWithEmailAndPassword(auth, email, password); */
+	}
+);
+
+async function authenticate(mode, email, password) {
+	try {
+		let response;
+		if (mode === "register") {
+			response = await createUserWithEmailAndPassword(auth, email, password);
+		} else if (mode === "login") {
+			response = await signInWithEmailAndPassword(auth, email, password);
+		} else {
+			throw new Error("DEV_ERR");
+		}
+
+		const { uid, displayName, photoURL, stsTokenManager } = response.user;
+		const { accessToken } = stsTokenManager;
+		const userInfo = {
+			token: accessToken,
+			user: { uid, email, displayName, photoURL },
+		};
+		return userInfo;
+	} catch (error) {
+		const msg = transformErrorMsg(error);
+    console.log("auth/>>error", msg);
+		throw new Error(msg);
+	}
+}
 
 //login
 //const authLogin = async ({ email, password }) => {
-  const login = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
+const login = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
   const { email, password } = credentials;
-  console.debug("auth/login>>", email, password);
-	try {
-		const credentials = await signInWithEmailAndPassword(auth, email, password);
-		console.log("authLogin>>credentials", credentials);
-		return credentials.user;
-	} catch (error) {
-		console.log("auth/login>>error", error.response); // error,
-		const msg = transformErrorMsg(error.response);
-		return thunkAPI.rejectWithValue(msg);
-	}
-  });
+    try {
+			return authenticate("login", email, password);
+		} catch (error) {
+			return thunkAPI.rejectWithValue(error);
+		}
+});
 
 /**
  * logout
  */
-//TODO: ???
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 	try {
-    const response = await signOut(auth);
-    console.log("logout>>credentials", response);
+		const response = await signOut(auth);
+		console.log("logout>>response", response);
 		token.remove();
 		//	thunkAPI.dispatch(removeContacts());
 		//	thunkAPI.dispatch(setFilter(""));
 	} catch (error) {
-		const msg = transformErrorMsg(error.response);
+		const msg = transformErrorMsg(error);
 		return thunkAPI.rejectWithValue(msg);
 	}
 });
 
 const updateUserProfile = async (update) => {
-	const user = auth.currentUser;
+	console.log("updateUserProfile>>response", "TODO");
+	/* 	const user = auth.currentUser;
 
 	// якщо такий користувач знайдений
 	if (user) {
@@ -110,7 +133,7 @@ const updateUserProfile = async (update) => {
 		} catch (error) {
 			throw error;
 		}
-	}
+	} */
 };
 
 const authOperations = {
@@ -118,5 +141,6 @@ const authOperations = {
 	logout,
 	login,
 	fetchCurrentUser,
+	onUserStateChanged,
 };
 export default authOperations;

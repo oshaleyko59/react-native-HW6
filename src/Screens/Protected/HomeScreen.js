@@ -10,6 +10,7 @@ import CreatePostScreen from "./Tabs/CreatePostScreen";
 import LogoutBtn from "../../components/ui/LogoutBtn";
 import BackBtn from "../../components/ui/BackBtn";
 import { COLORS } from "../../common/constants";
+import useAuth from "../../hooks/useAuthentication";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -29,8 +30,8 @@ backdrop-filter: blur(13.591408729553223px);
 */
 export default function HomeScreen({ navigation }) {
 	//const { logout } = useAuthContext();
-  const logout = () => { }; //FIXME:
-  
+  const {logout} = useAuth(); 
+
 	return (
 		<BottomTab.Navigator
 			initialRouteName="Posts"

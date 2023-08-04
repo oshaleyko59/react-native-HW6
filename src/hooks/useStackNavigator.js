@@ -31,9 +31,9 @@ export function useStackNavigator() {
 		);
 	}
 
-  function ProtectedStack({ onLogout }) {
+  function ProtectedStack() {
     const navigation = useNavigation();
-    const { isAuthenticated, user, token } = useAuth();
+    const { isAuthenticated, user, token, logout } = useAuth();
     console.debug('ProtectedStack>>user',isAuthenticated, user, token);
 		return (
 			<MainStack.Navigator
@@ -50,7 +50,7 @@ export function useStackNavigator() {
 						headerShown: false,
 						headerRight: () => (
 							<View style={{ marginRight: 16 }}>
-								<LogoutBtn onPress={onLogout} />
+								<LogoutBtn onPress={logout} />
 							</View>
 						),
 					}}
@@ -87,12 +87,12 @@ export function useStackNavigator() {
 	//to get rid of error of inconsistent use of hooks
   //function getStackNavigator(isLoading) {
     function getStackNavigator(isAuthenticated) {
-			const { onLogout } = useAuth();
+			const { logout } = useAuth();
 			/* console.debug(
 			`getStackNavigator>>isAuthenticated=${isAuthenticated}/isLoading=${isLoading}`
 		); */
 			return isAuthenticated ? (
-				<ProtectedStack onLogout={onLogout} />
+				<ProtectedStack onLogout={logout} />
 			) : (
 				<AuthStack />
 			);
