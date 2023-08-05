@@ -30,8 +30,14 @@ const onUserStateChanged = async (onChange = () => {}) => {
  */
 const fetchCurrentUser = createAsyncThunk(
 	"auth/refresh",
-	async (_, thunkAPI) => {
-		return thunkAPI.rejectWithValue(msg); // FIXME:
+  async (_, thunkAPI) => {
+    console.debug("auth/refresh>>");
+		try {
+			onAuthStateChanged(auth, (user) => console.log("user>>", user));
+		} catch (error) {
+			return thunkAPI.rejectWithValue(error);
+		}
+		//		return thunkAPI.rejectWithValue(msg); // FIXME:
 		/* 		const state = thunkAPI.getState();
     const persistedToken = state.auth.token;
 
@@ -60,16 +66,17 @@ const register = createAsyncThunk(
 	"auth/register",
 	async (userData, thunkAPI) => {
 		const { email, password } = userData;
-    try {
-      return authenticate("register", email, password);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-
+		try {
+			return authenticate("register", email, password);
+		} catch (error) {
+			return thunkAPI.rejectWithValue(error);
+		}
 	}
 );
 
-async function authenticate(mode, email, password) {
+//async function authenticate(mode, email, password) {
+async function authenticate(mode, user) {
+  const {email, password }= user;
 	try {
 		let response;
 		if (mode === "register") {
@@ -89,7 +96,7 @@ async function authenticate(mode, email, password) {
 		return userInfo;
 	} catch (error) {
 		const msg = transformErrorMsg(error);
-    console.log("auth/>>error", msg);
+		console.log("auth/>>error", msg);
 		throw new Error(msg);
 	}
 }
@@ -97,12 +104,12 @@ async function authenticate(mode, email, password) {
 //login
 //const authLogin = async ({ email, password }) => {
 const login = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
-  const { email, password } = credentials;
-    try {
-			return authenticate("login", email, password);
-		} catch (error) {
-			return thunkAPI.rejectWithValue(error);
-		}
+	const { email, password } = credentials;
+	try {
+		return authenticate("login", email, password);
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
 });
 
 /**
