@@ -1,5 +1,4 @@
 import { View, StyleSheet } from "react-native";
-//import { useAuthContext } from "../../../store/auth-context";
 
 import UserCard from "../../../components/UserCard";
 import PostsList from "../../../components/Posts/PostsList";
@@ -8,14 +7,11 @@ import { COLORS } from "../../../common/constants";
 import dummyPosts from "../../../models/dummyPosts";
 
 export default function PostsScreen() {
-	//const { getUser } = useAuthContext();
-	const getUser = () => {return {email: 'Dummy@gmail.com',}}; //FIXME:
-	const user = getUser();
 
 	return (
 		<View style={styles.container}>
 			<View>
-				<UserCard user={user} />
+				<UserCard />
 			</View>
 			<PostsList posts={dummyPosts} />
 		</View>

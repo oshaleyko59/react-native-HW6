@@ -1,19 +1,21 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 import { COLORS } from "../common/constants";
+import useAuth from "../hooks/useAuthentication";
 
-export default function UserCard({ user }) {
-
+export default function UserCard() {
+  const { user } = useAuth();
+  
 	return (
 		<View style={styles.container}>
-			{user.image ? (
-				<Image source={user.image} alt="User photo" style={styles.image} />
+			{user.photoUrl ? (
+				<Image source={user.photoUrl} alt="User photo" style={styles.image} />
 			) : (
 				<View style={styles.image}>
 					<Text style={styles.email}>No photo</Text>
 				</View>
 			)}
 			<View style={styles.inner}>
-				<Text style={styles.name}>{user.name}</Text>
+				<Text style={styles.name}>{user.displayName}</Text>
 				<Text style={styles.email}>{user.email}</Text>
 			</View>
 		</View>
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     alignItems:'center'
 	},
 	inner: {
-		marginLeft: 8, 
+		marginLeft: 8,
 	},
 
 	name: {

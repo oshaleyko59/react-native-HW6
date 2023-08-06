@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit"; 
+import { configureStore } from "@reduxjs/toolkit";
 import {
 	persistReducer,
 	persistStore,
@@ -16,7 +16,7 @@ import postsReducer from "./postsSlice";
 const persistConfig = {
 	key: "auth",
 	storage: AsyncStorage,
-	whitelist: ["token"],
+	whitelist: ["user"],
 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
 

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import { View,ImageBackground, Text, StyleSheet } from "react-native";
 
-//import { useAuthContext } from "../../../store/auth-context";
+import useAuth from "../../../hooks/useAuthentication";
 import Avatar from "../../../components/Avatar";
 import LogoutBtn from "../../../components/ui/LogoutBtn";
 import { bkgImage, COLORS } from "../../../common/constants";
@@ -18,16 +18,20 @@ export default function ProfileScreen() {
 		getPosts();
 	}, []);
 
-	//const { logout } = useAuthContext();
-  const logout = () => { }; //FIXME:
-  
+  const { onLogout } = useAuth();
+
+	const onPressLogout = () => {
+		console.debug("onPressLogout>>", onLogout);
+		onLogout();
+	};
+
 	const name = "NAME XXX"; //TODO:
 	return (
 		<View style={styles.flex}>
 			<ImageBackground source={bkgImage} resizeMode="cover" style={styles.flex}>
 				<View style={styles.formContainer}>
 					<View style={styles.logOutButton}>
-						<LogoutBtn onPress={logout} />
+						<LogoutBtn onPress={onPressLogout} />
 					</View>
 					<Avatar modeAdd={false} />
 					<View style={{ marginTop: 92 }}>

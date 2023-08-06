@@ -20,74 +20,71 @@ const transformErrorMsg = (error) => {
 	}
 };
 
-const onUserStateChanged = async (onChange = () => {}) => {
-	onAuthStateChanged((user) => {
-		onChange(user);
-	});
-};
-/* ******************* refresh User ********************
- * lookup firebase accout data
- */
-const fetchCurrentUser = createAsyncThunk(
-	"auth/refresh",
-  async (_, thunkAPI) => {
-    console.debug("auth/refresh>>");
-		try {
-			onAuthStateChanged(auth, (user) => console.log("user>>", user));
-		} catch (error) {
-			return thunkAPI.rejectWithValue(error);
-		}
-		//		return thunkAPI.rejectWithValue(msg); // FIXME:
-		/* 		const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
-
-    token.set(persistedToken);
-
-		try {
-      const {data} = await axios.post(
-				`https://identitytoolkit.googleapis.com/v1/accounts:${lookup}?key=${API_KEY}`,
-				{
-					idToken: persistedToken,
-				}
-			);
-      console.debug("fetchCurrentUser>>data", data);
-			//thunkAPI.dispatch(fetchContacts());
-			return data;
-		} catch (error) {
-			const msg = transformErrorMsg(error);
-			return thunkAPI.rejectWithValue(msg);
-		} */
-	}
-);
-
 //register
-//export const authRegister = async ({ email, password }) => {
 const register = createAsyncThunk(
 	"auth/register",
 	async (userData, thunkAPI) => {
-		const { email, password } = userData;
 		try {
-			return authenticate("register", email, password);
+			return authenticate("register", userData);
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error);
 		}
 	}
 );
 
-//async function authenticate(mode, email, password) {
-async function authenticate(mode, user) {
-  const {email, password }= user;
+//login
+const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
+	try {
+		return authenticate("login", userData);
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+const updateUserProfile = async (update) => {
+		const user = auth.currentUser;
+	// якщо такий користувач знайдений
+	if (user) {
+		// оновлюємо його профайл
+			return updateProfile(user, update);
+  }
+  throw new Error("Unexpected_ERR: no current user");
+};
+
+async function authenticate(mode, userData) {
+	const { email, password, name } = userData;
 	try {
 		let response;
 		if (mode === "register") {
-			response = await createUserWithEmailAndPassword(auth, email, password);
+			const userCredential = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			console.debug(
+				"authenticate>>userCredential",
+				userCredential.user.email,
+				userCredential.user.displayName
+			);
+      await updateUserProfile({ displayName: name });
+      console.debug("auth.currentUser", auth.currentUser.displayName);
 		} else if (mode === "login") {
-			response = await signInWithEmailAndPassword(auth, email, password);
+			const userCredential = await signInWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			console.debug(
+				"authenticate>>userCredential",
+				userCredential.user.email,
+				userCredential.user.displayName
+			);
+			response = userCredential.user;
 		} else {
 			throw new Error("DEV_ERR");
 		}
 
-		const { uid, displayName, photoURL, stsTokenManager } = response.user;
+		const { uid, displayName, photoURL, stsTokenManager } = auth.currentUser;
 		const { accessToken } = stsTokenManager;
 		const userInfo = {
 			token: accessToken,
@@ -101,53 +98,42 @@ async function authenticate(mode, user) {
 	}
 }
 
-//login
-//const authLogin = async ({ email, password }) => {
-const login = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
-	const { email, password } = credentials;
-	try {
-		return authenticate("login", email, password);
-	} catch (error) {
-		return thunkAPI.rejectWithValue(error);
-	}
-});
-
 /**
  * logout
  */
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 	try {
-		const response = await signOut(auth);
-		console.log("logout>>response", response);
-		token.remove();
+		await signOut(auth);
+		console.log("logout>>");
+		//token.remove();
 		//	thunkAPI.dispatch(removeContacts());
-		//	thunkAPI.dispatch(setFilter(""));
 	} catch (error) {
 		const msg = transformErrorMsg(error);
 		return thunkAPI.rejectWithValue(msg);
 	}
 });
 
-const updateUserProfile = async (update) => {
-	console.log("updateUserProfile>>response", "TODO");
-	/* 	const user = auth.currentUser;
-
-	// якщо такий користувач знайдений
-	if (user) {
-		// оновлюємо його профайл
-		try {
-			await updateProfile(user, update);
-		} catch (error) {
-			throw error;
-		}
-	} */
-};
-
 const authOperations = {
 	register,
 	logout,
 	login,
-	fetchCurrentUser,
-	onUserStateChanged,
 };
 export default authOperations;
+
+
+/* ******************* refresh User ********************
+ * lookup firebase accout data
+ */
+/* const fetchCurrentUser = createAsyncThunk(
+	"auth/refresh",
+	async (_, thunkAPI) => {
+		try {
+			console.debug("auth/refresh>>");
+			onAuthStateChanged(auth, (user) => {
+				console.log("user>>", user);
+			});
+		} catch (error) {
+			return thunkAPI.rejectWithValue(error); // FIXME:
+		}
+	}
+); */

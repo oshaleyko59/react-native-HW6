@@ -41,7 +41,8 @@
     "@babel/core": "^7.20.0",
     "lorem-ipsum": "^2.0.8",
     "react-devtools": "^4.28.0",
-    "react-lorem-ipsum": "^1.4.10"
+    "react-lorem-ipsum": "^1.4.10",
+    "redux-logger": "^3.0.6"
   },
   "private": true
 }

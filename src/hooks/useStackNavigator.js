@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
 import useAuth from "./useAuthentication";
-//import useAuth from "./useAuth";
 import LoginScreen from "../Screens/Auth/LoginScreen";
 import RegistrationScreen from "../Screens/Auth/RegistrationScreen";
 import HomeScreen from "../Screens/Protected/HomeScreen";
@@ -33,8 +32,8 @@ export function useStackNavigator() {
 
   function ProtectedStack() {
     const navigation = useNavigation();
-    const { isAuthenticated, user, token, logout } = useAuth();
-    console.debug('ProtectedStack>>user',isAuthenticated, user, token);
+    const { isAuthenticated, user,  logout } = useAuth();
+    console.debug('ProtectedStack>>user',isAuthenticated, user);
 		return (
 			<MainStack.Navigator
 				screenOptions={{

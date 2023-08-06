@@ -7,13 +7,13 @@ import { getFirestore } from "firebase/firestore";
 // Функція для підключення сховища файлів в проект
 import { getStorage } from "firebase/storage";
 
-const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
-console.debug("API_KEY>>", API_KEY);
+//const API_KEY = process.env.EXPO_PUBLIC_API_KEY; //NB! it's safe Google says
+//console.debug("API_KEY>>", API_KEY);
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-	apiKey: API_KEY,
+	apiKey: "AIzaSyDV2mQ5bRj1ddESFKMGmqtLpLxlBPlCQ_8",
 	authDomain: "react-native-goit-1b74f.firebaseapp.com",
 	databaseURL: "https://react-native-goit-1b74f-default-rtdb.firebaseio.com",
 	projectId: "react-native-goit-1b74f",
