@@ -5,7 +5,7 @@ import useAuth from "../../../hooks/useAuthentication";
 import Avatar from "../../../components/Avatar";
 import LogoutBtn from "../../../components/ui/LogoutBtn";
 import { bkgImage, COLORS } from "../../../common/constants";
-import { fetchPosts } from "../../../utils/http";
+import { fetchPosts } from "../../../utils/handlePosts";
 
 export default function ProfileScreen() {
 	//separate function as useEffect shall not return a promise
@@ -21,7 +21,7 @@ export default function ProfileScreen() {
   const { onLogout } = useAuth();
 
 	const onPressLogout = () => {
-		console.debug("onPressLogout>>", onLogout);
+		//conso le.debug("onPressLogout>>", onLogout);
 		onLogout();
 	};
 

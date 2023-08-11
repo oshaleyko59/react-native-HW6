@@ -4,11 +4,12 @@ import useAuth from "../hooks/useAuthentication";
 
 export default function UserCard() {
   const { user } = useAuth();
-  
+  console.log("UserCard>>user", user.email);
+
 	return (
 		<View style={styles.container}>
-			{user.photoUrl ? (
-				<Image source={user.photoUrl} alt="User photo" style={styles.image} />
+			{user.photoURL ? (
+				<Image source={{uri:user.photoURL}} alt="User photo" style={styles.image} />
 			) : (
 				<View style={styles.image}>
 					<Text style={styles.email}>No photo</Text>

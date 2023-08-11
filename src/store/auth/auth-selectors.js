@@ -1,4 +1,4 @@
-const selectIsAuthenticated = (state) => !!state.auth.user;
+const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 const selectUser = (state) => state.auth.user;
 const selectErrorMsg = (state) => state.auth.errorMsg;
 

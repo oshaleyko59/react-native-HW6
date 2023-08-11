@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
-import { StyleSheet, View, Dimensions, Text } from "react-native";
+import { StyleSheet, View, Dimensions, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import useAuth from "../../hooks/useAuthentication";
 import AuthButtons from "./authButtons";
 import PasswordInput from "./PasswordInput";
 import EmailInput from "../../components/auth/EmailInput";
@@ -10,9 +11,10 @@ import Avatar from "../Avatar";
 import { COLORS } from "../../common/constants";
 
 function AuthForm({ modeLogin, onSubmit }) {
+	const { user } = useAuth();
 	const [kbdStatus, setKbdStatus] = useState(false);
 	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
+	const [email, setEmail] = useState(modeLogin && user?.email);
 	const [password, setPassword] = useState("");
 
 	const height = useMemo(() => (modeLogin ? 489 : 549), [modeLogin]);
@@ -22,13 +24,26 @@ function AuthForm({ modeLogin, onSubmit }) {
 		[height]
 	);
 
-  function submitHandler() {
-    onSubmit({
+	//console.log("email>>", email);
+
+	function submitHandler() {
+		if (
+			email.length === 0 ||
+			password.length < 6 ||
+			(!modeLogin && name.length === 0)
+		) {
+			Alert.alert(
+				"Please fill in every field and check password (it must be longer than 6 symbols"
+			);
+			return;
+		}
+
+		onSubmit({
 			name,
 			email,
 			password,
-    });
-  }
+		});
+	}
 
 	const navigation = useNavigation();
 
@@ -39,7 +54,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 			navigation.replace("Login");
 		}
 	}
-
+//				onChangeText={(value) => setEmail(value)}
 	return (
 		<View
 			style={[
@@ -50,26 +65,29 @@ function AuthForm({ modeLogin, onSubmit }) {
 							marginTop: marginTopCalculated,
 							height: height,
 							paddingTop: paddTop,
-					},
+					  },
 			]}
 		>
-      {!modeLogin && <Avatar modeAdd={ true} />}
+			{!modeLogin && (
+				<Avatar modeAdd={true} email={email.length > 5 ? email : false} />
+			)}
 			<Text style={styles.header}>{modeLogin ? "Увійти" : "Реєстрація"}</Text>
 			{!modeLogin && (
 				<StyledTextInput
 					autoComplete="name"
 					autoCapitalize="words"
 					placeholder="Логін"
-					onEndEditing={(value) => setName(value)}
+					onEndEditing={(value) => setName(value.trim())}
 					setKbdStatus={setKbdStatus}
 				/>
 			)}
 			<EmailInput
-				onEndEditing={(value) => setEmail(value)}
+				value={modeLogin && user?.email}
+				onEndEditing={(value) => setEmail(value.trim().toLowerCase())}
 				setKbdStatus={setKbdStatus}
 			/>
 			<PasswordInput
-				onEndEditing={(value) => setPassword(value)}
+				onEndEditing={(value) => setPassword(value.trim())}
 				setKbdStatus={setKbdStatus}
 			/>
 			{!kbdStatus && (

@@ -1,10 +1,11 @@
 import { View } from "react-native";
 import StyledTextInput from "./StyledTextInput";
 
-export default function EmailInput({ onEndEditing, setKbdStatus }) {
+export default function EmailInput({ onEndEditing, setKbdStatus, value }) {
 	return (
 		<View>
-			<StyledTextInput
+      <StyledTextInput
+        value={value}
 				autoComplete="email"
 				autoCapitalize="none"
 				keyboardType="email-address"

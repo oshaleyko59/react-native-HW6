@@ -1,10 +1,21 @@
 import { Plus, X } from "react-native-feather";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
+import md5 from "md5";
+
+import getGravatarUrl from "../helpers/getGravatarUrl";
 import { COLORS } from "../common/constants";
 
-export default function Avatar({ modeAdd}) {
+export default function Avatar({ modeAdd, email }) {
+	const uri = email ? getGravatarUrl(email, 120) : '';
+
 	return (
 		<View style={styles.holder}>
+			{uri && <View style={styles.image}>
+				<Image
+					style={styles.image}
+					source={{uri}}
+				/>
+			</View>}
 			<View style={styles.circled}>
 				{modeAdd ? (
 					<Plus stroke={COLORS.accent} fill="#fff" width={20} height={20} />
@@ -15,13 +26,13 @@ export default function Avatar({ modeAdd}) {
 		</View>
 	);
 }
-//TODO: pressable icon
-
-/*  import { Plus, X } from "react-native-feather";
-<Plus stroke={COLORS.accent} fill="#fff" width={20} height={20} />
-*/
 
 const styles = StyleSheet.create({
+	image: {
+		width: 120,
+		height: 120,
+		borderRadius: 16,
+	},
 	holder: {
 		position: "absolute",
 		left: "50%",
@@ -47,7 +58,6 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.mainBkg,
 	},
 });
-
 
 /*
 			<PlusCircle

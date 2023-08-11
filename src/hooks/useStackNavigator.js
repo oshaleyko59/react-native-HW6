@@ -33,7 +33,7 @@ export function useStackNavigator() {
   function ProtectedStack() {
     const navigation = useNavigation();
     const { isAuthenticated, user,  logout } = useAuth();
-    console.debug('ProtectedStack>>user',isAuthenticated, user);
+   // console.debug('ProtectedStack>>user',isAuthenticated, user.email);
 		return (
 			<MainStack.Navigator
 				screenOptions={{

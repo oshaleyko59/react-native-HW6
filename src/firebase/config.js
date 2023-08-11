@@ -5,10 +5,9 @@ import { getAuth } from "firebase/auth";
 // Функція для підключення бази даних у проект
 import { getFirestore } from "firebase/firestore";
 // Функція для підключення сховища файлів в проект
-import { getStorage } from "firebase/storage";
+import { getStorage, ref } from "firebase/storage";
 
 //const API_KEY = process.env.EXPO_PUBLIC_API_KEY; //NB! it's safe Google says
-//console.debug("API_KEY>>", API_KEY);
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -27,10 +26,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-//createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut
-
-
-export const db = getFirestore(app);
-export const storage = getStorage(app);
-
+export const dbFirestore = getFirestore(app);
+export const storageFirebase = getStorage(app);
+//export const storageImagesRef = ref(storageFirebase, 'images');
 

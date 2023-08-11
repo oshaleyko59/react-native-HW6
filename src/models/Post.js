@@ -1,11 +1,15 @@
+import uuid from "react-native-uuid";
+
 export default class Post {
-	constructor(title, place, location, pictureUri) {
+	constructor(author, title, place, location, pictureUri) {
+		this.author = author;
 		this.title = title;
 		this.pictureUri = pictureUri;
 		this.place = place;
 		this.location = location; // { lat: 0.141241, lng: 127.121 }
-    this.comments = [];
+		this.comments = [];
     this.likes = [];
-		this.id = Math.random().toString(); //FIXME: add now
+    this.dtStamp = Date.now();
+		this.id = uuid.v4();
 	}
 }

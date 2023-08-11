@@ -29,7 +29,7 @@ export default function Root() {
 		if (isAuthenticated) {
 			//FIXME:
 			onAuthStateChanged(auth, (user) => {
-				console.log("useLayoutEffect>>user", user?.email, user?.displayName);
+				conso le.log("useLayoutEffect>>user", user?.email, user?.displayName);
 			});
 		}
 	}, []);

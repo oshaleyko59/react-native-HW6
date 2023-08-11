@@ -4,16 +4,13 @@ import formatDT from "../../helpers/datetime-format";
 import { COLORS } from "../../common/constants";
 
 import DUMMY from "../../models/dummy";
+import getGravatarUrl from "../../helpers/getGravatarUrl";
+
 console.log("DUMMY>>", DUMMY);
 
-function getAvatar(authorId) {
-  //TODO:
-	return Number.parseFloat(authorId) < 0.5 ? DUMMY.avatar28 : DUMMY.avatar28_1;
-}
-
-export default function CommentCard({ authorId, text, dtStamp }) {
+export default function CommentCard({ authorEmail, text, dtStamp }) {
 	console.log("CommentCard>>", text);
-	const ava = getAvatar(authorId);
+	const ava = getGravatarUrl(authorEmail, 28);
 	return (
 		<View
 			style={[

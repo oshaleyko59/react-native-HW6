@@ -31,7 +31,7 @@ export default function HomeScreen({ navigation }) {
   const { onLogout } = useAuth();
 
   const onPressLogout = () => {
-		console.debug("onPressLogout>>", onLogout);
+		//conso le.debug("onPressLogout>>", onLogout);
 		onLogout();
   }
 

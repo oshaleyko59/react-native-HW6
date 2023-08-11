@@ -14,19 +14,19 @@ export default function PostCard({ id,
   const navigation = useNavigation();
 //
 	function commentsPressHandler() {
-		console.log("Comments pressed!>>comments", comments);
+	//	co nsole.log("Comments pressed!>>comments", comments);
 		navigation.navigate("Comments", { pictureUri, comments});
 	}
 
 	function locationPressHandler() {
-    console.log("location pressed!>>", location);
+   // cons ole.log("location pressed!>>", location);
     navigation.navigate("Map", { location, title });
 	}
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.imgContainer}>
-				<Image source={pictureUri} style={styles.img} />
+				<Image source={{uri:pictureUri}} style={styles.img} />
 			</View>
 			<View style={styles.titleContainer}>
 				<Text style={styles.titleStyle}>{title}</Text>

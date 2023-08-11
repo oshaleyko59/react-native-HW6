@@ -2,14 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 
-import Loading from "../ui/Loading";
+//import Loading from "../ui/Loading";
 import CameraBtn from "../ui/CameraBtn";
 
 export default function ImageTaker({ picture, onTakePicture }) {
-	const [hasCameraPermission, setHasCameraPermission] = useState();
+	//const [hasCameraPermission, setHasCameraPermission] = useState();
 	const cameraRef = useRef();
 
-	useEffect(() => {
+/* 	useEffect(() => {
 		(async () => {
 			const cameraPermission = await Camera.requestCameraPermissionsAsync();
 			setHasCameraPermission(cameraPermission.status === "granted");
@@ -24,7 +24,7 @@ export default function ImageTaker({ picture, onTakePicture }) {
 				Permission for camera not granted. Please change this in settings.
 			</Text>
 		);
-	}
+	} */
 
 	async function takePhotoHandler() {
 		const options = {

@@ -1,8 +1,10 @@
+import uuid from "react-native-uuid";
+
 export default class Comment {
-	constructor(text, authorId, dtStamp) {
+	constructor(text, authorEmail, dtStamp) {
 		this.text = text;
-		this.authorId = authorId;
-		this.dtStamp = dtStamp;
-		this.id = Math.random().toString(); //FIXME: add now
+		this.authorEmail = authorEmail;
+		this.dtStamp = dtStamp ?? Date.now();
+		this.id = uuid.v4();
 	}
 }

@@ -14,7 +14,7 @@ export default function CommentsScreen() {
 		<>
 			<View style={styles.container}>
 				<View style={styles.imgContainer}>
-					<Image source={pictureUri} style={styles.img} />
+					<Image source={{uri:pictureUri}} style={styles.img} />
 				</View>
 				<CommentsList comments={comments} />
 				<CommentForm />

@@ -3,6 +3,7 @@ import { View, TextInput, StyleSheet} from "react-native";
 import { COLORS } from "../../common/constants";
 
 export default function StyledTextInput({
+  value,
 	onEndEditing,
 	secureTextEntry,
 	placeholder,
@@ -12,7 +13,7 @@ export default function StyledTextInput({
 	setKbdStatus,
 }) {
 	const [editing, setEditing] = useState(false);
-	const [text, setText] = useState("");
+	const [text, setText] = useState(value);
 
 	return (
 		<View>

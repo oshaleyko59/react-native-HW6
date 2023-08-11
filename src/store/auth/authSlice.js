@@ -13,6 +13,7 @@ const isPendingAction = (action) => {
 const initialState = {
 	user: null,
 	//token: null,
+  isAuthenticated: false,
 	errorMsg: "",
 };
 
@@ -23,33 +24,27 @@ const authSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(authOperations.register.fulfilled, (state, action) => {
-				console.debug(
-					"authOperations.register.fulfilled>>state.user",
-					action.payload.user
-				);
 				state.user = action.payload.user;
 				//state.token = action.payload.token;
+        state.isAuthenticated = true;
 			})
 			.addCase(authOperations.login.fulfilled, (state, action) => {
-				console.debug(
-					"authOperations.login.fulfilled>>state.user",
-					action.payload.user
-				);
 				state.user = action.payload.user;
 				//state.token = action.payload.token;
+        state.isAuthenticated = true;
 			})
 			.addCase(authOperations.logout.fulfilled, (state) => {
-				console.debug("authOperations.logout.fulfilled>>state.user=null");
+				//cons ole.debug("authOperations.logout.fulfilled>>state.user=null");
         state.user = null;
         //state.token = null;
 			})
 			.addMatcher(isPendingAction, (state) => {
 				state.errorMsg = "";
-				console.log(">>isPendingAction");
+        console.log(">>isPendingAction");
+        state.isAuthenticated = false;
 				//state.token = null;
 			})
 			.addMatcher(isRejectedAction, (state, action) => {
-				console.log("isRejectedAction>>", action.error.message);
 				const errm = `Authentication failed! ${action.error.message}`;
 				state.errorMsg = errm;
 				if (errm) {
@@ -64,12 +59,11 @@ export default authSlice.reducer;
 
 /* 	reducers: {
 		setUser(state, { payload }) {
-      console.debug("setUser>> payload", payload);
-      //FIXME: leave only needed? not used!
+      con sole.debug("setUser>> payload", payload);
 			return payload;
 		}, */
 /* 		setToken(state, { payload }) {
-			console.debug("setToken>> payload", payload); //FIXME:
+			con sole.debug("setToken>> payload", payload);
 			return payload;
 		},
 	},*/

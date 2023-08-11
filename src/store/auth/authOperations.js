@@ -7,6 +7,8 @@ import {
 	signOut,
 	AuthErrorCodes,
 } from "firebase/auth";
+import md5 from "md5";
+
 import { auth } from "../../firebase/config";
 
 const transformErrorMsg = (error) => {
@@ -41,12 +43,16 @@ const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
 	}
 });
 
-const updateUserProfile = async (update) => {
+//<img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" />
+
+const updateUserProfile = async (name, email) => {
 		const user = auth.currentUser;
 	// якщо такий користувач знайдений
 	if (user) {
 		// оновлюємо його профайл
-			return updateProfile(user, update);
+    const gravatarUrl = `https://www.gravatar.com/avatar/${md5(email)}?d=wavatar`;
+
+			return updateProfile(user, { displayName: name , photoURL: gravatarUrl});
   }
   throw new Error("Unexpected_ERR: no current user");
 };
@@ -54,32 +60,23 @@ const updateUserProfile = async (update) => {
 async function authenticate(mode, userData) {
 	const { email, password, name } = userData;
 	try {
-		let response;
+		//let response;
 		if (mode === "register") {
-			const userCredential = await createUserWithEmailAndPassword(
+     // const userCredential =
+        await createUserWithEmailAndPassword(
 				auth,
 				email,
 				password
 			);
-			console.debug(
-				"authenticate>>userCredential",
-				userCredential.user.email,
-				userCredential.user.displayName
-			);
-      await updateUserProfile({ displayName: name });
-      console.debug("auth.currentUser", auth.currentUser.displayName);
+
+      await updateUserProfile(name, email);
 		} else if (mode === "login") {
 			const userCredential = await signInWithEmailAndPassword(
 				auth,
 				email,
 				password
 			);
-			console.debug(
-				"authenticate>>userCredential",
-				userCredential.user.email,
-				userCredential.user.displayName
-			);
-			response = userCredential.user;
+	//		response = userCredential.user;
 		} else {
 			throw new Error("DEV_ERR");
 		}
@@ -90,7 +87,8 @@ async function authenticate(mode, userData) {
 			token: accessToken,
 			user: { uid, email, displayName, photoURL },
 		};
-		return userInfo;
+    return userInfo;
+
 	} catch (error) {
 		const msg = transformErrorMsg(error);
 		console.log("auth/>>error", msg);
@@ -128,9 +126,9 @@ export default authOperations;
 	"auth/refresh",
 	async (_, thunkAPI) => {
 		try {
-			console.debug("auth/refresh>>");
+			conso le.debug("auth/refresh>>");
 			onAuthStateChanged(auth, (user) => {
-				console.log("user>>", user);
+				con sole.log("user>>", user);
 			});
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error); // FIXME:
