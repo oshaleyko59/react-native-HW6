@@ -16,5 +16,3 @@ export default function EmailInput({ onEndEditing, setKbdStatus, value }) {
 		</View>
 	);
 }
-
-				//value, 		value={value}

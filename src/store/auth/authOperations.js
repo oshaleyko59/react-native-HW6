@@ -2,13 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
-	onAuthStateChanged,
+	//onAuthStateChanged,
 	updateProfile,
 	signOut,
 	AuthErrorCodes,
 } from "firebase/auth";
 import md5 from "md5";
-
+import saveAuthor from "../../utils/saveAuthor";
 import { auth } from "../../firebase/config";
 
 const transformErrorMsg = (error) => {
@@ -43,40 +43,27 @@ const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
 	}
 });
 
-//<img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" />
-
 const updateUserProfile = async (name, email) => {
-		const user = auth.currentUser;
-	// якщо такий користувач знайдений
+	const user = auth.currentUser;
 	if (user) {
-		// оновлюємо його профайл
-    const gravatarUrl = `https://www.gravatar.com/avatar/${md5(email)}?d=wavatar`;
-
-			return updateProfile(user, { displayName: name , photoURL: gravatarUrl});
-  }
-  throw new Error("Unexpected_ERR: no current user");
+		const gravatarUrl = `https://www.gravatar.com/avatar/${md5(
+			email
+		)}?d=wavatar`;
+		return updateProfile(user, { displayName: name, photoURL: gravatarUrl });
+	}
+	throw new Error("Unexpected_ERR: no current user");
 };
 
 async function authenticate(mode, userData) {
-	const { email, password, name } = userData;
+  const { email, password, name } = userData;
+  //console.log("auth/>>userData", userData);
 	try {
-		//let response;
 		if (mode === "register") {
-     // const userCredential =
-        await createUserWithEmailAndPassword(
-				auth,
-				email,
-				password
-			);
-
+			await createUserWithEmailAndPassword(auth, email, password);
       await updateUserProfile(name, email);
+
 		} else if (mode === "login") {
-			const userCredential = await signInWithEmailAndPassword(
-				auth,
-				email,
-				password
-			);
-	//		response = userCredential.user;
+			await signInWithEmailAndPassword(auth, email, password);
 		} else {
 			throw new Error("DEV_ERR");
 		}
@@ -86,9 +73,10 @@ async function authenticate(mode, userData) {
 		const userInfo = {
 			token: accessToken,
 			user: { uid, email, displayName, photoURL },
-		};
-    return userInfo;
-
+    };
+    // console.log("auth/>>userInfo", userInfo);
+    saveAuthor(uid, displayName, photoURL);
+		return userInfo;
 	} catch (error) {
 		const msg = transformErrorMsg(error);
 		console.log("auth/>>error", msg);
@@ -104,7 +92,7 @@ const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 		await signOut(auth);
 		console.log("logout>>");
 		//token.remove();
-		//	thunkAPI.dispatch(removeContacts());
+		//	thunkAPI.dispatch(remove...());
 	} catch (error) {
 		const msg = transformErrorMsg(error);
 		return thunkAPI.rejectWithValue(msg);
@@ -117,7 +105,6 @@ const authOperations = {
 	login,
 };
 export default authOperations;
-
 
 /* ******************* refresh User ********************
  * lookup firebase accout data

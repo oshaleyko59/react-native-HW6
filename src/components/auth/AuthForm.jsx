@@ -24,8 +24,6 @@ function AuthForm({ modeLogin, onSubmit }) {
 		[height]
 	);
 
-	//console.log("email>>", email);
-
 	function submitHandler() {
 		if (
 			email.length === 0 ||
@@ -54,7 +52,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 			navigation.replace("Login");
 		}
 	}
-//				onChangeText={(value) => setEmail(value)}
+
 	return (
 		<View
 			style={[
@@ -82,7 +80,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 				/>
 			)}
 			<EmailInput
-				value={modeLogin && user?.email}
+				value={modeLogin? user? user.email : '' :''}
 				onEndEditing={(value) => setEmail(value.trim().toLowerCase())}
 				setKbdStatus={setKbdStatus}
 			/>

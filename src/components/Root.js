@@ -6,8 +6,9 @@ import useAuth from "../hooks/useAuthentication";
 
 export default function Root() {
 	const { isAuthenticated } = useAuth();
-	const { getStackNavigator } = useStackNavigator();
-	const currentUser = auth.currentUser;
+  const { getStackNavigator } = useStackNavigator();
+
+  const currentUser = auth.currentUser;
 	console.debug(
 		"auth.currentUser>>",
 		isAuthenticated,

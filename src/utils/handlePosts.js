@@ -6,7 +6,7 @@ import {
 //	uploadBytesResumable,
 } from "firebase/storage";
 
-import { dbFirestore, storageFirebase } from "../firebase/config";
+import { db, storageImages } from "../firebase/config";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 const BASE_URL = "https://react-native-goit-1b74f-default-rtdb.firebaseio.com"; //TODO: ???
@@ -21,7 +21,7 @@ export async function uploadPhotoToFirebaseStorage(photo) {
 		const file = await response.blob();
 		const postId = uuid.v4();
 		const imageId = `${postId}.jpg`;
-		const refImage = ref(storageFirebase, imageId);
+		const refImage = ref(storageImages, imageId);
     //  const uploadTask = uploadBytesResumable(refImage, file);
     const res = await uploadBytes(refImage, file);
     const url = await getDownloadURL(refImage);
@@ -57,7 +57,7 @@ export async function uploadPhotoToFirebaseStorage(photo) {
 			}
     ); */
 	} catch (error) {
-    console.log("ERROR>>upload", error);
+    console.error("ERROR>>upload", error);
     return null;
 	}
 }

@@ -2,12 +2,10 @@
 import { initializeApp } from "firebase/app";
 // Функція для підключення авторизації в проект
 import { getAuth } from "firebase/auth";
-// Функція для підключення бази даних у проект
-import { getFirestore } from "firebase/firestore";
 // Функція для підключення сховища файлів в проект
-import { getStorage, ref } from "firebase/storage";
-
-//const API_KEY = process.env.EXPO_PUBLIC_API_KEY; //NB! it's safe Google says
+import { getStorage} from "firebase/storage";
+// Функція для підключення бази даних у проект
+import { getDatabase, ref, set } from "firebase/database";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -26,7 +24,29 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-export const dbFirestore = getFirestore(app);
-export const storageFirebase = getStorage(app);
-//export const storageImagesRef = ref(storageFirebase, 'images');
+export const storageImages = getStorage(app);
+export const db = getDatabase(app);
+
+
+
+//import { getFirestore } from "firebase/firestore"
+//import { collection, addDoc } from "firebase/firestore";
+
+//const API_KEY = process.env.EXPO_PUBLIC_API_KEY; //NB! it's safe Google says
+
+//export const dbFirestore = getFirestore(app);
+/* export async function testDb() {
+ console.log("testDb>>", typeof db);
+try {
+	const docRef = await addDoc(collection(db, "users"), {
+		first: "Ada",
+		last: "Lovelace",
+		born: 1815,
+	});
+	console.log("Document written with ID: ", docRef.id);
+} catch (e) {
+	console.error("Error adding document: ", e);
+}
+} */
+
 
