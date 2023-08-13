@@ -4,7 +4,7 @@ import { COLORS } from "../../common/constants";
 import PostCard from "./PostCard";
 
 function PostsList({ posts }) {
-	
+  console.log("PostsList>>posts ", posts.length);
 	if (!posts || posts.length === 0) {
 		return (
 			<View style={styles.fallbackContainer}>

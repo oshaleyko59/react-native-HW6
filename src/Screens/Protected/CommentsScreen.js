@@ -7,14 +7,14 @@ import { COLORS } from "../../common/constants";
 
 export default function CommentsScreen() {
 	const route = useRoute(); //text, authorId, dtStamp
-	const { pictureUri, comments } = route.params;
+	const { picture, comments } = route.params;
 	console.log("CommentsScreen>>comments", route.params.comments.length);
 
 	return (
 		<>
 			<View style={styles.container}>
 				<View style={styles.imgContainer}>
-					<Image source={{uri:pictureUri}} style={styles.img} />
+					<Image source={{uri:picture}} style={styles.img} />
 				</View>
 				<CommentsList comments={comments} />
 				<CommentForm />

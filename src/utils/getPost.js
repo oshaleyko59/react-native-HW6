@@ -6,8 +6,9 @@ export default async function getPost(id) {
 	try {
     const snapshot = await get(child(db, `posts/${id}`));
     if (snapshot.exists()) {
-      //console.log(snapshot.val());
       console.debug("getPost>>", snapshot.val());
+      const p = snapshot.val();
+      return p;
 		} else {
 			console.log("No data available");
 		}
@@ -16,10 +17,11 @@ export default async function getPost(id) {
 	}
 }
 
+/*
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
-/*
+
 const db = getDatabase();
 const auth = getAuth();
 

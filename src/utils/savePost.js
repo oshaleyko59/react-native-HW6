@@ -1,5 +1,4 @@
 import { ref, set, push, child, update } from "firebase/database";
-//import uuid from "react-native-uuid";
 
 import { db } from "../firebase/config";
 import Post from "../models/Post";

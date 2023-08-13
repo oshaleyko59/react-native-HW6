@@ -1,26 +1,32 @@
 import { View, StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 import UserCard from "../../../components/UserCard";
 import PostsList from "../../../components/Posts/PostsList";
 import { COLORS } from "../../../common/constants";
-import useAuth from "../../../hooks/useAuthentication";
-import getPosts from "../../../utils/getPosts";
-//import dummyPosts from "../../../models/dummyPosts";
+import getAllPosts from "../../../utils/getAllPosts";
+
 const dummyPosts = [];
 export default function PostsScreen() {
-/*   const { user } = useAuth();
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-		setPosts(getPosts(user.uid));
+	const [posts, setPosts] = useState([]);
+
+	useLayoutEffect(() => {
+		(async () => {
+			try {
+				await getAllPosts(setPosts);
+				console.log("useLayoutEffect>>posts ", posts.length);
+			} catch (err) {
+				console.error(err);
+			}
+		})();
 	}, []);
- */
+
 	return (
 		<View style={styles.container}>
 			<View>
 				<UserCard />
 			</View>
-			<PostsList posts={dummyPosts} />
+			<PostsList posts={posts} />
 		</View>
 	);
 }
@@ -32,4 +38,3 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.mainBkg,
 	},
 });
-

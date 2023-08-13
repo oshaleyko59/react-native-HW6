@@ -61,21 +61,21 @@ async function authenticate(mode, userData) {
 		if (mode === "register") {
 			await createUserWithEmailAndPassword(auth, email, password);
       await updateUserProfile(name, email);
-
+    // console.log("auth/>>userInfo", userInfo);
+    saveAuthor(uid, displayName, photoURL);
 		} else if (mode === "login") {
 			await signInWithEmailAndPassword(auth, email, password);
 		} else {
 			throw new Error("DEV_ERR");
 		}
-
+// common part:
 		const { uid, displayName, photoURL, stsTokenManager } = auth.currentUser;
 		const { accessToken } = stsTokenManager;
 		const userInfo = {
 			token: accessToken,
 			user: { uid, email, displayName, photoURL },
     };
-    // console.log("auth/>>userInfo", userInfo);
-    saveAuthor(uid, displayName, photoURL);
+
 		return userInfo;
 	} catch (error) {
 		const msg = transformErrorMsg(error);

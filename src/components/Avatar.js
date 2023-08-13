@@ -5,9 +5,9 @@ import md5 from "md5";
 import getGravatarUrl from "../helpers/getGravatarUrl";
 import { COLORS } from "../common/constants";
 
-export default function Avatar({ modeAdd, email }) {
-	const uri = email ? getGravatarUrl(email, 120) : '';
-
+export default function Avatar({ modeAdd, email, url }) {
+	const uri = url??( email ? getGravatarUrl(email, 120) : '');
+  console.debug("Avatar>>uri", uri);
 	return (
 		<View style={styles.holder}>
 			{uri && <View style={styles.image}>

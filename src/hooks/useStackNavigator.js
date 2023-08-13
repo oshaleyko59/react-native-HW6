@@ -86,12 +86,12 @@ export function useStackNavigator() {
 	//to get rid of error of inconsistent use of hooks
   //function getStackNavigator(isLoading) {
     function getStackNavigator(isAuthenticated) {
-			const { logout } = useAuth();
+			const { onLogout } = useAuth();
 			/* console.debug(
 			`getStackNavigator>>isAuthenticated=${isAuthenticated}/isLoading=${isLoading}`
 		); */
 			return isAuthenticated ? (
-				<ProtectedStack onLogout={logout} />
+				<ProtectedStack onLogout={onLogout} />
 			) : (
 				<AuthStack />
 			);

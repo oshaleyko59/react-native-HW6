@@ -1,31 +1,36 @@
-import React, {useEffect} from "react";
+import React, { useLayoutEffect , useState} from "react";
 import { View,ImageBackground, Text, StyleSheet } from "react-native";
 
 import useAuth from "../../../hooks/useAuthentication";
 import Avatar from "../../../components/Avatar";
 import LogoutBtn from "../../../components/ui/LogoutBtn";
 import { bkgImage, COLORS } from "../../../common/constants";
-import { fetchPosts } from "../../../utils/handlePosts";
+//import { fetchPosts } from "../../../utils/handlePosts";
+import getUserPosts from "../../../utils/getUserPosts";
 
 export default function ProfileScreen() {
-	//separate function as useEffect shall not return a promise
-	async function getPosts() {
-		const posts = await fetchPosts();
-		// return posts;
-	}
+  const [userPosts, setUserPosts] = useState([]);
+  const { user, onLogout } = useAuth();
 
-	useEffect(() => {
-		getPosts();
+  useLayoutEffect(() => {
+		console.log("useLayoutEffect>>user.uid ", user.uid);
+		(async () => {
+			try {
+				//await getUserPosts(user.uid, setUserPosts);
+				console.log("useLayoutEffect>>userPosts ", userPosts.length);
+			} catch (err) {
+				console.error(err);
+			}
+		})();
 	}, []);
 
-  const { onLogout } = useAuth();
-
 	const onPressLogout = () => {
-		//conso le.debug("onPressLogout>>", onLogout);
+		//console.debug("onPressLogout>>", onLogout);
 		onLogout();
 	};
 
-	const name = "NAME XXX"; //TODO:
+  const name = user.displayName; //TODO:
+
 	return (
 		<View style={styles.flex}>
 			<ImageBackground source={bkgImage} resizeMode="cover" style={styles.flex}>
@@ -33,7 +38,7 @@ export default function ProfileScreen() {
 					<View style={styles.logOutButton}>
 						<LogoutBtn onPress={onPressLogout} />
 					</View>
-					<Avatar modeAdd={false} />
+          <Avatar modeAdd={false} url={user.photoURL } />
 					<View style={{ marginTop: 92 }}>
 						<Text style={styles.header}>{name}</Text>
 					</View>

@@ -75,17 +75,17 @@ function AuthForm({ modeLogin, onSubmit }) {
 					autoComplete="name"
 					autoCapitalize="words"
 					placeholder="Логін"
-					onEndEditing={(value) => setName(value.trim())}
+					onEndEditing={(value) => setName(value?.trim())}
 					setKbdStatus={setKbdStatus}
 				/>
 			)}
 			<EmailInput
 				value={modeLogin? user? user.email : '' :''}
-				onEndEditing={(value) => setEmail(value.trim().toLowerCase())}
+				onEndEditing={(value) => setEmail(value?.trim().toLowerCase())}
 				setKbdStatus={setKbdStatus}
 			/>
 			<PasswordInput
-				onEndEditing={(value) => setPassword(value.trim())}
+				onEndEditing={(value) => setPassword(value?.trim())}
 				setKbdStatus={setKbdStatus}
 			/>
 			{!kbdStatus && (
