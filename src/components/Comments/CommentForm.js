@@ -4,15 +4,16 @@ import SendBtn from "../ui/SendBtn";
 import Comment from "../../models/Comment";
 import { COLORS } from "../../common/constants";
 import useAuth from "../../hooks/useAuthentication";
+import saveComment from "../../utils/saveComment";
 
-export default function CommentForm() {
+export default function CommentForm({postId}) {
 	const [text, setText] = useState("");
-  //TODO: userId
   const { user } = useAuth();
-  console.info("CommentForm>>user", user.email);
+  console.info("CommentForm>>user", user.uid);
 
 	function submitCommentHandler() {
-		const newComment = new Comment(text, user.email, Date.now());
+    const newComment = new Comment(text, user.uid);
+    saveComment(text, user.uid, postId);
     console.info("Submit>>comment", newComment);
     setText("");
 	}

@@ -4,54 +4,75 @@ import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "../../common/constants";
 import IconButton from "../ui/IconButton";
 
-export default function PostCard({ id,
+export default function PostCard(post) {
+	const navigation = useNavigation();
+	const{
+	id,
 	title,
 	place,
 	location,
 	picture,
 	comments,
-}) {
-  const navigation = useNavigation();
-//
+	commentsCount,
+	likesCount,
+} = post;
 	function commentsPressHandler() {
-	//	co nsole.log("Comments pressed!>>comments", comments);
-		navigation.navigate("Comments", { picture, comments});
+		navigation.navigate("Comments", post);
 	}
 
 	function locationPressHandler() {
-   // cons ole.log("location pressed!>>", location);
-    navigation.navigate("Map", { location, title });
+		navigation.navigate("Map", { location, title });
 	}
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.imgContainer}>
-				<Image source={{uri:picture}} style={styles.img} />
+				<Image source={{ uri: picture }} style={styles.img} />
 			</View>
 			<View style={styles.titleContainer}>
 				<Text style={styles.titleStyle}>{title}</Text>
 			</View>
 			<View style={styles.btnsContainer}>
 				<View style={styles.btnContainer}>
-					<IconButton
-						icon={"message-circle"}
-						size={24}
-						color={COLORS.inactive}
-						onPress={commentsPressHandler}
-					/>
-					<Text
-						style={[
-							styles.commentsStyle,
-							comments?.length && { color: COLORS.mainText },
-						]}
-					>
-						{comments?.length}
-					</Text>
+					<View style={styles.btnContainerLeft}>
+						<View style={styles.btnContainer}>
+							<IconButton
+								icon={"message-circle"}
+								size={20}
+								color={COLORS.inactive}
+								onPress={commentsPressHandler}
+							/>
+							<Text
+								style={[
+									styles.commentsStyle,
+									commentsCount === 0 && { color: COLORS.mainText },
+								]}
+							>
+								{commentsCount}
+							</Text>
+						</View>
+						<View style={styles.btnContainer}>
+							<IconButton
+								icon={"thumbs-up"}
+								size={20}
+								color={COLORS.inactive}
+								onPress={()=>console.log("likes pressed>>TODO")}
+							/>
+							<Text
+								style={[
+									styles.commentsStyle,
+									likesCount === 0 && { color: COLORS.mainText },
+								]}
+							>
+								{likesCount}
+							</Text>
+						</View>
+					</View>
 				</View>
 				<View style={styles.btnContainer}>
 					<IconButton
 						icon={"map-pin"}
-						size={24}
+						size={20}
 						color={COLORS.inactive}
 						onPress={locationPressHandler}
 					/>
@@ -82,8 +103,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 	},
-	btnContainer: { flexDirection: "row", alignItems: "center" },
-
+	btnContainer: { flexDirection: "row",  gap: 6 },
+	btnContainerLeft: { flexDirection: "row",  gap: 24 },
 	img: { width: "100%", height: 240 },
 	titleStyle: {
 		fontSize: 16,

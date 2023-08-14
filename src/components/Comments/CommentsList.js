@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../common/constants";
 import CommentCard  from "./CommentCard";
 
-export default function CommentsList({ comments }) {
+export default function CommentsList({ comments}) {
 
 	if (!comments || (comments.length === 0)) { //TODO: remove, no need
 		return (

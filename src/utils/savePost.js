@@ -1,4 +1,4 @@
-import { ref, set, push, child, update } from "firebase/database";
+import { ref,  push, child, update } from "firebase/database";
 
 import { db } from "../firebase/config";
 import Post from "../models/Post";

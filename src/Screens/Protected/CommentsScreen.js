@@ -6,9 +6,9 @@ import CommentForm from "../../components/Comments/CommentForm";
 import { COLORS } from "../../common/constants";
 
 export default function CommentsScreen() {
-	const route = useRoute(); //text, authorId, dtStamp
-	const { picture, comments } = route.params;
-	console.log("CommentsScreen>>comments", route.params.comments.length);
+	const route = useRoute();
+	const { picture, comments, id } = route.params;
+	console.log("CommentsScreen>>postId", id, comments?.length);
 
 	return (
 		<>
@@ -17,11 +17,12 @@ export default function CommentsScreen() {
 					<Image source={{uri:picture}} style={styles.img} />
 				</View>
 				<CommentsList comments={comments} />
-				<CommentForm />
+				<CommentForm postId={id} />
 			</View>
 		</>
 	);
 }
+
 //TODO: KeyboardAvoidingView ???
 const styles = StyleSheet.create({
 	container: {

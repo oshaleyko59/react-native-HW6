@@ -3,10 +3,10 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import formatDT from "../../helpers/datetime-format";
 import { COLORS } from "../../common/constants";
 
-import DUMMY from "../../models/dummy";
+import DUMMY from "../../../z.ignore/dummy";
 import getGravatarUrl from "../../helpers/getGravatarUrl";
 
-console.log("DUMMY>>", DUMMY);
+//console.log("DUMMY>>", DUMMY);
 
 export default function CommentCard({ authorEmail, text, dtStamp }) {
 	console.log("CommentCard>>", text);

@@ -1,38 +1,15 @@
-import { ref, child, get } from "firebase/database";
+import { ref, child, get, onValue } from "firebase/database";
 
 import { db } from "../firebase/config";
 
-export default async function getPost(id) {
-	try {
-    const snapshot = await get(child(db, `posts/${id}`));
-    if (snapshot.exists()) {
-      console.debug("getPost>>", snapshot.val());
-      const p = snapshot.val();
-      return p;
-		} else {
-			console.log("No data available");
-		}
-	} catch (e) {
-		console.error("Error @getPost>>", e);
-	}
+export default async function getPost(id, posts) {
+	console.debug("getPost>>id", id);
+	const postRef = ref(db, "posts/" + id);
+	onValue(postRef, (snapshot) => {
+  const data = snapshot.val();
+   // console.debug("getPost>>data", data);
+    posts.push({ id, ...data });
+  console.debug("getPost>>posts", posts.length);
+});
 }
 
-/*
-import { getDatabase, ref, onValue } from "firebase/database";
-import { getAuth } from "firebase/auth";
-
-
-const db = getDatabase();
-const auth = getAuth();
-
-const userId = auth.currentUser.uid;
-return onValue( //???????????????
-	ref(db, "/users/" + userId),
-	(snapshot) => {
-		const username = (snapshot.val() && snapshot.val().username) || "Anonymous";
-		// ...
-	},
-	{
-		onlyOnce: true,
-	}
-); */

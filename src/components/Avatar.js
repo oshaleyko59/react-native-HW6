@@ -7,7 +7,7 @@ import { COLORS } from "../common/constants";
 
 export default function Avatar({ modeAdd, email, url }) {
 	const uri = url??( email ? getGravatarUrl(email, 120) : '');
-  console.debug("Avatar>>uri", uri);
+//
 	return (
 		<View style={styles.holder}>
 			{uri && <View style={styles.image}>
