@@ -9,7 +9,8 @@ export default class Post {
 		this.location = location; // { lat: 0.141241, lng: 127.121 }
     this.dtCreated = Date.now();
     this.likesCount = 0;
+    this.likes = {}; //list of objects {uid: true}
     this.commentsCount = 0;
-    this.comments = {};
+    this.comments = {}; // list of Comment objects
 	}
 }

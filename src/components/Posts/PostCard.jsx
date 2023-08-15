@@ -1,21 +1,50 @@
+import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { ref, onValue } from "firebase/database";
 
+import { db } from "../../firebase/config";
 import { COLORS } from "../../common/constants";
 import IconButton from "../ui/IconButton";
+import useAuth from "../../hooks/useAuthentication";
+import toggleLike from "../../utils/toggleLike";
+	/* 	const {
+		id,
+		title,
+		place,
+		location,
+		picture,
+		//comments,
+		commentsCount,
+		likes,
+		likesCount,
+	} = post; */
+//export default function PostCard(post) {
 
-export default function PostCard(post) {
+export default function PostCard({ postId }) {
+  console.log("PostCard>>", postId);
+/*   		return (
+				<View style={styles.container}>
+					<Text>ERROR: empty post!</Text>
+				</View>
+			); */
+	//console.log("PostCard>>", postId);
 	const navigation = useNavigation();
-	const{
-	id,
-	title,
-	place,
-	location,
-	picture,
-	comments,
-	commentsCount,
-	likesCount,
-} = post;
+	const { user } = useAuth();
+	const [post, setPost] = useState();
+	//const postLoaded = !!post;
+
+
+	const postRef = ref(db, "/posts/" + postId);
+
+	useEffect(() => {
+		onValue(postRef, (snapshot) => {
+			const data = snapshot.val();
+			console.debug("useEffect>>onValue", postId, data.likesCount, data.title);
+			setPost(data);
+		});
+	}, [postId]);
+
 	function commentsPressHandler() {
 		navigation.navigate("Comments", post);
 	}
@@ -24,13 +53,27 @@ export default function PostCard(post) {
 		navigation.navigate("Map", { location, title });
 	}
 
+	function toggleLikePressHandler() {
+		console.log("likes pressed>>TODO:");
+		toggleLike(user.uid, id);
+	}
+
+  if (!post) {
+    console.log("ERROR>>empty post!!");
+		return (
+			<View style={styles.container}>
+				<Text>ERROR: empty post!</Text>
+			</View>
+		);
+	}
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.imgContainer}>
-				<Image source={{ uri: picture }} style={styles.img} />
+				<Image source={{ uri: post.picture }} style={styles.img} />
 			</View>
 			<View style={styles.titleContainer}>
-				<Text style={styles.titleStyle}>{title}</Text>
+				<Text style={styles.titleStyle}>{post.title}</Text>
 			</View>
 			<View style={styles.btnsContainer}>
 				<View style={styles.btnContainer}>
@@ -45,10 +88,10 @@ export default function PostCard(post) {
 							<Text
 								style={[
 									styles.commentsStyle,
-									commentsCount === 0 && { color: COLORS.mainText },
+									post.commentsCount === 0 && { color: COLORS.mainText },
 								]}
 							>
-								{commentsCount}
+								{post.commentsCount}
 							</Text>
 						</View>
 						<View style={styles.btnContainer}>
@@ -56,15 +99,15 @@ export default function PostCard(post) {
 								icon={"thumbs-up"}
 								size={20}
 								color={COLORS.inactive}
-								onPress={()=>console.log("likes pressed>>TODO")}
+								onPress={toggleLikePressHandler}
 							/>
 							<Text
 								style={[
 									styles.commentsStyle,
-									likesCount === 0 && { color: COLORS.mainText },
+									post.likesCount === 0 && { color: COLORS.mainText },
 								]}
 							>
-								{likesCount}
+								{post.likesCount}
 							</Text>
 						</View>
 					</View>
@@ -76,7 +119,7 @@ export default function PostCard(post) {
 						color={COLORS.inactive}
 						onPress={locationPressHandler}
 					/>
-					<Text style={styles.placeStyle}>{place}</Text>
+					<Text style={styles.placeStyle}>{post.place}</Text>
 				</View>
 			</View>
 		</View>
@@ -103,8 +146,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 	},
-	btnContainer: { flexDirection: "row",  gap: 6 },
-	btnContainerLeft: { flexDirection: "row",  gap: 24 },
+	btnContainer: { flexDirection: "row", gap: 6 },
+	btnContainerLeft: { flexDirection: "row", gap: 24 },
 	img: { width: "100%", height: 240 },
 	titleStyle: {
 		fontSize: 16,

@@ -3,8 +3,23 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../common/constants";
 import PostCard from "./PostCard";
 
+/**
+ * displays posts as FlatList
+ * @param {*} posts - list of post ids
+ * @returns
+ */
 function PostsList({ posts }) {
-  console.log("PostsList>>posts ", posts.length);
+  console.log("PostsList>>posts ", posts);
+/*   		return (
+				<View style={styles.fallbackContainer}>
+					<Text style={styles.fallbackText}>
+						No posts yet - start creating some!
+					</Text>
+				</View>
+  ); */
+
+
+
 	if (!posts || posts.length === 0) {
 		return (
 			<View style={styles.fallbackContainer}>
@@ -14,7 +29,8 @@ function PostsList({ posts }) {
 			</View>
 		);
 	}
-
+	//keyExtractor={(item) => item.id} keyExtractor={(item) => item.id}
+	//renderItem={(itemData) => <PostCard {...itemData.item}
 	return (
 		<View
 			style={{
@@ -24,8 +40,10 @@ function PostsList({ posts }) {
 		>
 			<FlatList
 				data={posts}
-				keyExtractor={(item) => item.id}
-				renderItem={(itemData) => <PostCard {...itemData.item} />}
+				renderItem={(item) => {
+					console.log("FlatList>>item", Object.keys(item.item)[0]);
+					return <PostCard postId={Object.keys(item.item)[0]} />;
+				}}
 			/>
 		</View>
 	);

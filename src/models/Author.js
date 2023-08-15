@@ -3,6 +3,8 @@ export default class Author {
 		this.name = name;
 		this.avatar = avatarUrl;
     this.dtJoined = Date.now();
-    this.posts = {};
+    this.posts= {}; //own posts
+    //TODO://posts to see (like followed,recommended etc )
+    //this.postsStrip = {};
 	}
 }
