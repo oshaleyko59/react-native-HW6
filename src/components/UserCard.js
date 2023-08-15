@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuthentication";
 
 export default function UserCard() {
   const { user } = useAuth();
-  console.log("UserCard>>user", user.email);
+  console.log("UserCard>>user", user? user.email:"NO USER!!!!");
 
 	return (
 		<View style={styles.container}>

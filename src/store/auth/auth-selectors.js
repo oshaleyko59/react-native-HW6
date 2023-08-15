@@ -1,12 +1,4 @@
 const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
-const selectUser = (state) => state.auth.user;
-const selectErrorMsg = (state) => state.auth.errorMsg;
 
-const authSelectors = {
-	selectIsAuthenticated,
-	selectUser,
-	selectErrorMsg,
-};
-export default authSelectors;
+export default selectIsAuthenticated;
 
-//const selectToken = (state) => state.auth.token; //TODO: remove ?

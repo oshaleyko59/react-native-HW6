@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
-	//onAuthStateChanged,
 	updateProfile,
 	signOut,
 	AuthErrorCodes,
@@ -21,28 +20,6 @@ const transformErrorMsg = (error) => {
 			return `${error.message}`;
 	}
 };
-
-//register
-const register = createAsyncThunk(
-	"auth/register",
-	async (userData, thunkAPI) => {
-		try {
-			return authenticate("register", userData);
-		} catch (error) {
-			return thunkAPI.rejectWithValue(error);
-		}
-	}
-);
-
-//login
-const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
-	try {
-		return authenticate("login", userData);
-	} catch (error) {
-		return thunkAPI.rejectWithValue(error);
-	}
-});
-
 const updateUserProfile = async (name, email) => {
 	const user = auth.currentUser;
 	if (user) {
@@ -55,28 +32,19 @@ const updateUserProfile = async (name, email) => {
 };
 
 async function authenticate(mode, userData) {
-  const { email, password, name } = userData;
-  //console.log("auth/>>userData", userData);
+	const { email, password, name } = userData;
+	//console.log("auth/>>userData", userData);
 	try {
 		if (mode === "register") {
 			await createUserWithEmailAndPassword(auth, email, password);
-      await updateUserProfile(name, email);
-    // console.log("auth/>>userInfo", userInfo);
-    saveAuthor(uid, displayName, photoURL);
+			await updateUserProfile(name, email);
+			saveAuthor(uid, displayName, photoURL);
 		} else if (mode === "login") {
 			await signInWithEmailAndPassword(auth, email, password);
 		} else {
 			throw new Error("DEV_ERR");
-		}
-// common part:
-		const { uid, displayName, photoURL, stsTokenManager } = auth.currentUser;
-		const { accessToken } = stsTokenManager;
-		const userInfo = {
-			token: accessToken,
-			user: { uid, email, displayName, photoURL },
-    };
+    }
 
-		return userInfo;
 	} catch (error) {
 		const msg = transformErrorMsg(error);
 		console.log("auth/>>error", msg);
@@ -85,14 +53,37 @@ async function authenticate(mode, userData) {
 }
 
 /**
+ * register
+ */
+const register = createAsyncThunk(
+	"auth/register",
+	async (userData, thunkAPI) => {
+		try {
+			authenticate("register", userData);
+		} catch (error) {
+			return thunkAPI.rejectWithValue(error);
+		}
+	}
+);
+
+/**
+ * login
+ */
+const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
+	try {
+		authenticate("login", userData);
+	} catch (error) {
+		return thunkAPI.rejectWithValue(error);
+	}
+});
+
+/**
  * logout
  */
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 	try {
 		await signOut(auth);
 		console.log("logout>>");
-		//token.remove();
-		//	thunkAPI.dispatch(remove...());
 	} catch (error) {
 		const msg = transformErrorMsg(error);
 		return thunkAPI.rejectWithValue(msg);
@@ -101,24 +92,8 @@ const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 
 const authOperations = {
 	register,
-	logout,
 	login,
+	logout,
 };
 export default authOperations;
 
-/* ******************* refresh User ********************
- * lookup firebase accout data
- */
-/* const fetchCurrentUser = createAsyncThunk(
-	"auth/refresh",
-	async (_, thunkAPI) => {
-		try {
-			conso le.debug("auth/refresh>>");
-			onAuthStateChanged(auth, (user) => {
-				con sole.log("user>>", user);
-			});
-		} catch (error) {
-			return thunkAPI.rejectWithValue(error); // FIXME:
-		}
-	}
-); */

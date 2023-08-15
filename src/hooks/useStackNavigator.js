@@ -1,7 +1,9 @@
 import { StyleSheet, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+import { onAuthStateChanged } from "firebase/auth";
 
+import { auth } from "../firebase/config";
 import useAuth from "./useAuthentication";
 import LoginScreen from "../Screens/Auth/LoginScreen";
 import RegistrationScreen from "../Screens/Auth/RegistrationScreen";
@@ -15,13 +17,7 @@ import { COLORS } from "../common/constants";
 
 const MainStack = createStackNavigator();
 
-export function useStackNavigator() {
-	function Busy() {
-		//	console.log("RENDER Loading");
-		return <Loading msg="Loading..." />;
-	}
-
-	function AuthStack() {
+function AuthStack() {
 		return (
 			<MainStack.Navigator screenOptions={{ headerShown: false }}>
 				<MainStack.Screen name="Login" component={LoginScreen} />
@@ -30,10 +26,10 @@ export function useStackNavigator() {
 		);
 	}
 
-  function ProtectedStack() {
-    const navigation = useNavigation();
-    const { isAuthenticated, user,  logout } = useAuth();
-   // console.debug('ProtectedStack>>user',isAuthenticated, user.email);
+	function ProtectedStack() {
+		const navigation = useNavigation();
+		const { isAuthenticated, user, logout } = useAuth();
+
 		return (
 			<MainStack.Navigator
 				screenOptions={{
@@ -80,22 +76,35 @@ export function useStackNavigator() {
 				/>
 			</MainStack.Navigator>
 		);
-	}
+}
 
-	//NB! transferring isLoading down here in props allowed
-	//to get rid of error of inconsistent use of hooks
-  //function getStackNavigator(isLoading) {
-    function getStackNavigator(isAuthenticated) {
-			const { onLogout } = useAuth();
-			/* console.debug(
-			`getStackNavigator>>isAuthenticated=${isAuthenticated}/isLoading=${isLoading}`
-		); */
-			return isAuthenticated ? (
-				<ProtectedStack onLogout={onLogout} />
-			) : (
-				<AuthStack />
-			);
-		}
+export function useStackNavigator() {
+
+	function getStackNavigator() {
+		const { onLogout, refreshUser, isAuthenticated } = useAuth();
+
+		onAuthStateChanged(auth, (user) => {
+			if (user) {
+				// User is signed in, see docs for a list of available properties
+				// https://firebase.google.com/docs/reference/js/auth.user
+				const uid = user.uid;
+				console.debug("onAuthStateChanged>>uid", auth.currentUser?.uid);
+				refreshUser(true);
+				return <ProtectedStack onLogout={onLogout} />;
+      } else {
+        // User is signed out
+				console.debug("onAuthStateChanged>>no user");
+				refreshUser(false);
+				return <AuthStack />;
+			}
+		});
+
+		console.info("getStackNavigator>>isAuthenticated", isAuthenticated);
+    return (isAuthenticated === null ?
+      (<Loading msg="Checking authentication status..." />) : isAuthenticated ?(
+			<ProtectedStack onLogout={onLogout} />
+		) : <AuthStack />);
+	}
 
 	return { getStackNavigator };
 }

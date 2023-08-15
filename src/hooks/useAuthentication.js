@@ -1,32 +1,30 @@
 import { useSelector, useDispatch } from "react-redux";
 
-import authSelectors from "../store/auth/auth-selectors";
+import selectIsAuthenticated from "../store/auth/auth-selectors";
 import authOperations from "../store/auth/authOperations";
+import { setIsAuthenticated } from "../store/auth/authSlice";
+import { auth } from "../firebase/config";
 
 const useAuth = () => {
-	const isAuthenticated = useSelector(authSelectors.selectIsAuthenticated);
-	const user = useSelector(authSelectors.selectUser);
-	const errorMsg = useSelector(authSelectors.selectErrorMsg);
-	const dispatch = useDispatch();
-	const onLogout = () => dispatch(authOperations.logout());
-	return {
-		isAuthenticated,
-		user,
-		errorMsg,
+	const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = auth.currentUser;
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    dispatch(setIsAuthenticated(false));
+    dispatch(authOperations.logout());
+  };
+
+  const refreshUser = (payload) => dispatch(setIsAuthenticated(payload));
+
+
+  return {
+    isAuthenticated,
+    user,
 		onLogout,
+		refreshUser,
 	};
 };
+
 export default useAuth;
 
-
-//const isRefreshingUser = useSelector(authSelectors.selectIsRefreshing);
-/*   const user = (() => {
-    if (!auth.currentUser) { return null; };
-    const { uid, displayName, photoURL} = auth.currentUser;
-		//const { accessToken } = stsTokenManager;			token: accessToken,, stsTokenManager
-		return {
-			uid, email, displayName, photoURL
-    };
-  })();   */
-//const token = useSelector(authSelectors.selectToken);
-//

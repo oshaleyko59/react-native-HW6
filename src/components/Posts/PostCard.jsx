@@ -8,39 +8,26 @@ import { COLORS } from "../../common/constants";
 import IconButton from "../ui/IconButton";
 import useAuth from "../../hooks/useAuthentication";
 import toggleLike from "../../utils/toggleLike";
-	/* 	const {
-		id,
-		title,
-		place,
-		location,
-		picture,
-		//comments,
-		commentsCount,
-		likes,
-		likesCount,
-	} = post; */
-//export default function PostCard(post) {
+import Loading from "../ui/Loading";
 
 export default function PostCard({ postId }) {
-  console.log("PostCard>>", postId);
-/*   		return (
-				<View style={styles.container}>
-					<Text>ERROR: empty post!</Text>
-				</View>
-			); */
-	//console.log("PostCard>>", postId);
+  console.info("PostCard>>", postId);
+
 	const navigation = useNavigation();
 	const { user } = useAuth();
 	const [post, setPost] = useState();
-	//const postLoaded = !!post;
-
 
 	const postRef = ref(db, "/posts/" + postId);
 
 	useEffect(() => {
 		onValue(postRef, (snapshot) => {
 			const data = snapshot.val();
-			console.debug("useEffect>>onValue", postId, data.likesCount, data.title);
+			console.debug(
+				"PostCard>>useEffect>>onValue",
+				postId,
+				data.likesCount,
+				data.title
+			);
 			setPost(data);
 		});
 	}, [postId]);
@@ -54,17 +41,13 @@ export default function PostCard({ postId }) {
 	}
 
 	function toggleLikePressHandler() {
-		console.log("likes pressed>>TODO:");
+		console.log("likes pressed>>");
 		toggleLike(user.uid, id);
 	}
 
   if (!post) {
     console.log("ERROR>>empty post!!");
-		return (
-			<View style={styles.container}>
-				<Text>ERROR: empty post!</Text>
-			</View>
-		);
+		return <Loading msg="Loading..." />;
 	}
 
 	return (
@@ -139,7 +122,7 @@ const styles = StyleSheet.create({
 		marginBottom: 8,
 		borderRadius: 8,
 		overflow: "hidden",
-		backgroundColor: "lightblue", //TODO:
+		backgroundColor: "lightblue",
 	},
 	titleContainer: { marginBottom: 8 },
 	btnsContainer: {

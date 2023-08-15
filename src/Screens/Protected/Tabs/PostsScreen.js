@@ -33,7 +33,7 @@ export default function PostsScreen() {
 			}
 		);
 	/*
-  useEffect(() => {
+  useEffect(() => { //FIXME:
     onChildAdded(stripRef, (data) => {
       //  const post = data.val();
       const key = data.key;
