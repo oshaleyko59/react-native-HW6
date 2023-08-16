@@ -1,10 +1,12 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 import { COLORS } from "../common/constants";
-import useAuth from "../hooks/useAuthentication";
-
+import useAuth from "../hooks/useAuth";
+import Loading
+  from "./ui/Loading";
 export default function UserCard() {
   const { user } = useAuth();
   console.log("UserCard>>user", user? user.email:"NO USER!!!!");
+  if (!user) return <Loading msg="... loading user data" />;
 
 	return (
 		<View style={styles.container}>

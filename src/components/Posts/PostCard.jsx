@@ -6,7 +6,7 @@ import { ref, onValue } from "firebase/database";
 import { db } from "../../firebase/config";
 import { COLORS } from "../../common/constants";
 import IconButton from "../ui/IconButton";
-import useAuth from "../../hooks/useAuthentication";
+import useAuth from "../../hooks/useAuth";
 import toggleLike from "../../utils/toggleLike";
 import Loading from "../ui/Loading";
 
@@ -32,6 +32,11 @@ export default function PostCard({ postId }) {
 		});
 	}, [postId]);
 
+  if (!post) {
+    console.log("ERROR>>empty post!!");
+		return <Loading msg="Loading..." />;
+	}
+
 	function commentsPressHandler() {
 		navigation.navigate("Comments", post);
 	}
@@ -43,11 +48,6 @@ export default function PostCard({ postId }) {
 	function toggleLikePressHandler() {
 		console.log("likes pressed>>");
 		toggleLike(user.uid, id);
-	}
-
-  if (!post) {
-    console.log("ERROR>>empty post!!");
-		return <Loading msg="Loading..." />;
 	}
 
 	return (

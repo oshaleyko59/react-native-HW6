@@ -3,7 +3,7 @@ import { View, ImageBackground, Text, StyleSheet, Dimensions } from "react-nativ
 import { ref, onValue, onChildAdded } from "firebase/database";
 
 import { db } from "../../../firebase/config";
-import useAuth from "../../../hooks/useAuthentication";
+import useAuth from "../../../hooks/useAuth";
 import Avatar from "../../../components/Avatar";
 import PostsList from "../../../components/Posts/PostsList";
 import LogoutBtn from "../../../components/ui/LogoutBtn";
@@ -26,10 +26,9 @@ export default function ProfileScreen() {
 				const childKey = childSnapshot.key;
 				const postId = {};
 				postId[childKey] = true;
-				console.info(">>childSnapshot", childSnapshot);
 				posts.push(postId);
 			});
-			console.debug("Once onvalue>>posts", posts);
+			//console.debug("Once onvalue>>posts", posts);
 			setUserPosts(posts);
 		},
 		{

@@ -9,7 +9,7 @@ import CreatePostScreen from "./Tabs/CreatePostScreen";
 import LogoutBtn from "../../components/ui/LogoutBtn";
 import BackBtn from "../../components/ui/BackBtn";
 import { COLORS } from "../../common/constants";
-import useAuth from "../../hooks/useAuthentication";
+import useAuth from "../../hooks/useAuth";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -21,7 +21,7 @@ const New = () => (
 	</View>
 );
 
-/* FIXME: header style
+/* TODO: header style
 
 background: #FFF;
 box-shadow: 0px 0.5px 0px 0px rgba(0, 0, 0, 0.30);
@@ -29,11 +29,6 @@ backdrop-filter: blur(13.591408729553223px);
 */
 export default function HomeScreen({ navigation }) {
   const { onLogout } = useAuth();
-
-  const onPressLogout = () => {
-		//conso le.debug("onPressLogout>>", onLogout);
-		onLogout();
-  }
 
 	return (
 		<BottomTab.Navigator
@@ -55,7 +50,7 @@ export default function HomeScreen({ navigation }) {
 					tabBarIcon: ({ focused, size, color }) => <Grid />,
 					headerRight: () => (
 						<View style={{ marginRight: 16 }}>
-							<LogoutBtn onPress={onPressLogout} />
+							<LogoutBtn onPress={onLogout} />
 						</View>
 					),
 				}}
@@ -93,7 +88,7 @@ const styles = StyleSheet.create({
 		borderBottomColor: COLORS.inactive,
 	},
 	headerTitle: {
-		//FIXME: for Android bottomPadding is incorrecy
+		//TODO: for Android bottomPadding is incorrect ???
 		color: COLORS.mainText,
 		fontFamily: "Roboto-Medium",
 		fontSize: 17,

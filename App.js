@@ -20,13 +20,11 @@ export default function App() {
 
   console.info("\n\nAPP START>>"); //TODO: remove with last console stmt
 
-  	return (
+  return   (
 			<Provider store={store}>
-				<>
 					<Root />
-				</>
 			</Provider>
-  );
+		);
 }
 
 /* 	return (

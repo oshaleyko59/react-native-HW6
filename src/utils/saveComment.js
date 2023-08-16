@@ -25,7 +25,6 @@ export default async function saveComment(authorId, text, postId) {
 		}
 }
 
-     // updates["posts/" + postId + "/commentsCount"] = //FIXME:;
 export  async function saveCommentTrans(authorId, text, postId) {
   const comment = new Comment(authorId, text);
   console.debug("saveComment>>comment", comment);

@@ -3,7 +3,7 @@ import { TextInput, View, StyleSheet } from "react-native";
 import SendBtn from "../ui/SendBtn";
 import Comment from "../../models/Comment";
 import { COLORS } from "../../common/constants";
-import useAuth from "../../hooks/useAuthentication";
+import useAuth from "../../hooks/useAuth";
 import saveComment from "../../utils/saveComment";
 
 export default function CommentForm({postId}) {

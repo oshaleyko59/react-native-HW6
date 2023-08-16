@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { StyleSheet, View, Dimensions, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import useAuth from "../../hooks/useAuthentication";
+import useAuth from "../../hooks/useAuth";
 import AuthButtons from "./authButtons";
 import PasswordInput from "./PasswordInput";
 import EmailInput from "../../components/auth/EmailInput";

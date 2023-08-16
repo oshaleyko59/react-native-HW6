@@ -21,13 +21,11 @@ import TrashBtn from "../ui/TrashBtn";
 import { COLORS } from "../../common/constants";
 import ImageTaker from "./ImageTaker";
 import {
-	//storePost,
-	uploadPhotoToFirebaseStorage,
-} from "../../utils/handlePosts";
-import useAuth from "../../hooks/useAuthentication";
+	uploadPhoto,
+} from "../../utils/upLoadPhoto";
+import useAuth from "../../hooks/useAuth";
 import Loading from "../ui/Loading";
 import savePost from "../../utils/savePost";
-//import Post from "../../models/Post";
 
 export default function PostForm() {
 	const { user } = useAuth();
@@ -112,10 +110,7 @@ export default function PostForm() {
 			return;
 		}
 
-		const url = await uploadPhotoToFirebaseStorage(picture);
-/* 		const newPost = new Post(user.uid, title, place, location, url);
-	console.debug("Publish>>post", newPost);
-		storePost(newPost); */
+		const url = await uploadPhoto(picture);
     savePost(user.uid, title, place, location, url);
 		clearPost();
 		navigation.navigate("Posts");

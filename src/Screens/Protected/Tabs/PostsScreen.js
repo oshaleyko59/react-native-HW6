@@ -22,10 +22,10 @@ export default function PostsScreen() {
 					const childKey = childSnapshot.key;
 					const postId = {};
 					postId[childKey] = true;
-					console.info(">>childSnapshot", childSnapshot);
+					//console.info(">>childSnapshot", childSnapshot);
 					posts.push(postId);
 				});
-				console.debug("Once onvalue>>posts", posts);
+				//console.debug("Once onvalue>>posts", posts);
 				setPosts(posts);
 			},
 			{
@@ -33,7 +33,7 @@ export default function PostsScreen() {
 			}
 		);
 	/*
-  useEffect(() => { //FIXME:
+  useEffect(() => { //TODO:
     onChildAdded(stripRef, (data) => {
       //  const post = data.val();
       const key = data.key;

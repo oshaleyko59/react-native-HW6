@@ -9,21 +9,23 @@ import {
 	PURGE,
 	REGISTER,
 } from "redux-persist";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import authReducer from "./auth/authSlice";
-import postsReducer from "./postsSlice";
+//import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const persistConfig = {
+import authReducer from "./auth/auth-slice";
+//import postsReducer from "./postsSlice";
+
+/* const persistConfig = {
 	key: "auth",
 	storage: AsyncStorage,
 	whitelist: ["user"],
-};
-const persistedReducer = persistReducer(persistConfig, authReducer);
+}; */
+//const persistedReducer = persistReducer(persistConfig, authReducer);
+	//	posts: postsReducer,
+
 
 export const store = configureStore({
 	reducer: {
-		auth: persistedReducer,
-		posts: postsReducer,
+		auth: authReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
@@ -33,5 +35,5 @@ export const store = configureStore({
 		}),
 });
 
-export const persistor = persistStore(store);
+//export const persistor = persistStore(store);
 
