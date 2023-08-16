@@ -10,7 +10,7 @@ import getGravatarUrl from "../../helpers/getGravatarUrl";
 
 export default function CommentCard({ authorEmail, text, dtStamp }) {
 	console.log("CommentCard>>", text);
-	const ava = getGravatarUrl(authorEmail, 28);
+	const ava = getGravatarUrl(authorEmail, 28); //TODO: photoURL from user???
 	return (
 		<View
 			style={[

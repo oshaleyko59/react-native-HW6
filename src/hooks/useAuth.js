@@ -6,6 +6,7 @@ import {
 	signOut,
 	AuthErrorCodes,
 } from "firebase/auth";
+import md5 from "md5";
 
 import { auth } from "../firebase/config";
 import { setIsAuthenticated } from "../store/auth/auth-slice";

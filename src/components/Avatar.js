@@ -1,12 +1,11 @@
 import { Plus, X } from "react-native-feather";
 import { View, StyleSheet, Image } from "react-native";
-import md5 from "md5";
 
 import getGravatarUrl from "../helpers/getGravatarUrl";
 import { COLORS } from "../common/constants";
 
 export default function Avatar({ modeAdd, email, url }) {
-	const uri = url??( email ? getGravatarUrl(email, 120) : '');
+	const uri = url??( email ? getGravatarUrl(email, 120) : ''); //TODO: photoURL from user???
 //
 	return (
 		<View style={styles.holder}>
