@@ -1,17 +1,30 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
-
+import { useEffect } from "react";
 import { COLORS } from "../../common/constants";
-import PostCard from "./PostCard";
+import PostCard from "./postcard/PostCard";
+import { useState } from "react";
+import { ref, onChildAdded } from "firebase/database";
 
 /**
  * displays posts as FlatList
- * @param  posts - list of post ids
+ * @param  listRef - list of post ids(object) //TODO: object with posts (need unigue keys under any circumstances)
  * @returns
  */
-function PostsList({ posts }) {
-  console.info("PostsList>>posts ", posts);
+function PostsList({ listRef }) {
+	const [postIdArr, setPostIdArray] = useState([]);
 
-	if (!posts || posts.length === 0) {
+	useEffect(() => {
+		const unsubscribe = onChildAdded(listRef, (data, prevChildName) => {
+			const key = data.key;
+			console.debug("PostsList>>onChildAdded", key);
+			const postId = {};
+			postId[key] = true;
+			setPostIdArray((postIdArr) => [postId, ...postIdArr]);
+		});
+		return unsubscribe; //returns Unsubcribe func
+	}, []);
+
+	if (!postIdArr) {
 		return (
 			<View style={styles.fallbackContainer}>
 				<Text style={styles.fallbackText}>
@@ -19,7 +32,9 @@ function PostsList({ posts }) {
 				</Text>
 			</View>
 		);
-	}
+  }
+
+	console.debug("PostsList>>postIdArr", postIdArr.length);
 
 	return (
 		<View
@@ -29,11 +44,8 @@ function PostsList({ posts }) {
 			}}
 		>
 			<FlatList
-				data={posts}
-				renderItem={(item) => {
-					//console.log("FlatList>>item", Object.keys(item.item)[0]);
-					return <PostCard postId={Object.keys(item.item)[0]} />;
-				}}
+				data={postIdArr}
+				renderItem={(item) => <PostCard postId={Object.keys(item.item)[0]} />}
 			/>
 		</View>
 	);
@@ -41,10 +53,6 @@ function PostsList({ posts }) {
 
 export default PostsList;
 
-	//keyExtractor={(item) => item.id} keyExtractor={(item) => item.id}
-	//renderItem={(itemData) => <PostCard {...itemData.item}
-
-  
 const styles = StyleSheet.create({
 	fallbackContainer: {
 		flex: 1,
@@ -56,3 +64,6 @@ const styles = StyleSheet.create({
 		color: COLORS.mainText,
 	},
 });
+
+//keyExtractor={(item) => item.id} keyExtractor={(item) => item.id}
+//renderItem={(itemData) => <PostCard {...itemData.item}
