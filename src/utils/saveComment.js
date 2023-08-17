@@ -1,46 +1,51 @@
-import { ref, push, child, update, runTransaction } from "firebase/database";
+import { ref, push, child, update, increment } from "firebase/database";
 
 import { db } from "../firebase/config";
 import Comment from "../models/Comment";
 
-export default async function saveComment(authorId, text, postId) {
-  const comment = new Comment(authorId, text);
-  console.debug("saveComment>>comment", comment);
+/**
+ * new commmment with update and server-side increment
+ * @param {*} authorId
+ * @param {*} text
+ * @param {*} postId
+ */
+export async function createComment(text, postId, authorId, avatar) {
+	const comment = new Comment(text, authorId, avatar);
+	console.debug("saveComment>>comment", comment);
 
-    try {
-			// Get a key for a new comment
-      const commentRef = child(ref(db), "posts/" + postId + "/comments");
-      const commentsCountRef = child(ref(db), "posts/" + postId + "/commentsCount");
-			const newCommentKey = push(commentRef).key;
-
-			// Write the new comment's data to the post's comments list
-			const updates = {};
-      updates["posts/" + postId + "/comments/" + newCommentKey] = comment;
-
-      await update(ref(db), updates);
-      console.log("saveComment>>id", newCommentKey);
-     // await runTransaction()
-		} catch (e) {
-			console.error("Error @saveComment>>", e);
-		}
+	//commentsCountRef
+	const commentRef = child(ref(db), "comments/" + postId);
+	const newCommentKey = push(commentRef).key;
+	const updates = {};
+	updates[`comments/${postId}/${newCommentKey}`] = comment;
+	updates[`posts/${postId}/commentsCount`] = increment(1);
+	return update(ref(db), updates);
 }
 
-export  async function saveCommentTrans(authorId, text, postId) {
-  const comment = new Comment(authorId, text);
-  console.debug("saveComment>>comment", comment);
+/* *
+ * new commmment as atomic transaction
+ * @param {*} authorId
+ * @param {*} text
+ * @param {*} postId
 
-  const postRef = ref(db, "/posts/" + postId);
-const commentRef = child(ref(db), "posts/" + postId + "/comments");
-const newCommentKey = push(commentRef).key;
+export async function saveCommentTrans(text, postId) {
+	const { user } = useAuth();
+	const comment = new Comment(text.user.uid, user.photoURL);
+	console.debug("saveComment>>comment", comment);
+
+	const postRef = ref(db, "/posts/" + postId);
+	const commentRef = child(ref(db), "posts/" + postId + "/comments");
+	const newCommentKey = push(commentRef).key;
 
 	runTransaction(postRef, (post) => {
-    if (post) {
-      if (!post.comments) {
-					post.comments = {};
+		if (post) {
+			if (!post.comments) {
+				post.comments = {};
 			}
-      post.comments[newCommentKey] = comment;
-      post.commentsCount++;
+			post.comments[newCommentKey] = comment;
+			post.commentsCount++;
 		}
 		return post;
-  });
+	});
 }
+*/

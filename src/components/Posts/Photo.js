@@ -1,4 +1,3 @@
-import { db } from "../../../firebase/config";
 import { StyleSheet, View, Image } from "react-native";
 
 export default function Photo({ uri }) {

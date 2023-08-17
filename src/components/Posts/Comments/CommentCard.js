@@ -1,38 +1,37 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 
-import formatDT from "../../helpers/datetime-format";
-import { COLORS } from "../../common/constants";
+import useAuth from "../../../hooks/useAuth";
+import formatDT from "../../../helpers/datetime-format";
+import { COLORS } from "../../../common/constants";
 
-import DUMMY from "../../../z.ignore/dummy";
-import getGravatarUrl from "../../helpers/getGravatarUrl";
+export default function CommentCard(props) {
+  const { user } = useAuth();
+  const { authorId, avatar, dtCreated, text } = props;
 
-//console.log("DUMMY>>", DUMMY);
+  console.log("CommentCard>>text", text);
 
-export default function CommentCard({ authorEmail, text, dtStamp }) {
-	console.log("CommentCard>>", text);
-	const ava = getGravatarUrl(authorEmail, 28); //TODO: photoURL from user???
 	return (
 		<View
 			style={[
 				styles.container,
-				ava === DUMMY.avatar28
+				user.uid === authorId
 					? { flexDirection: "row" }
 					: { flexDirection: "row-reverse" },
 			]}
 		>
 			<View style={styles.avatar}>
-				<Image source={ava} />
+				<Image source={{ uri: avatar }} alt="Author's avatar" style={styles.avatar} />
 			</View>
 			<View
 				style={[
 					styles.contentContainer,
-					ava === DUMMY.avatar28
+					user.uid === authorId
 						? { borderTopLeftRadius: 0 }
 						: { borderTopRightRadius: 0 },
 				]}
 			>
 				<Text style={styles.text}>{text}</Text>
-				<Text style={styles.date}>{formatDT(dtStamp)}</Text>
+				<Text style={styles.date}>{formatDT(dtCreated)}</Text>
 			</View>
 		</View>
 	);

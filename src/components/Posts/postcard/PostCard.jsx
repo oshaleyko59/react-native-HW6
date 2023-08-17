@@ -8,13 +8,13 @@ import useAuth from "../../../hooks/useAuth";
 import toggleLike from "../../../utils/toggleLike";
 import Loading from "../../ui/Loading";
 import Title from "./Title";
-import Photo from "./Photo";
+import Photo from "../Photo";
 import CommentsNumber from "./CommentsNumber";
 import LikesNumber from "./LikesNumber";
 import Place from "./Place";
 
 export default function PostCard({ postId }) {
-  console.info("PostCard>>", postId);
+  //console.info("PostCard>>", postId);
 
 	const navigation = useNavigation();
 	const { user } = useAuth();
@@ -26,9 +26,8 @@ export default function PostCard({ postId }) {
 		const unsubscribe = onValue(postRef, (snapshot) => {
 			const data = snapshot.val();
 			console.debug(
-				"PostCard>>useEffect>>onValue",
-				postId,
-				data.likesCount,
+				"PostCard>>useEffect>>#comments",
+				data.commentsCount,
 				data.title
 			);
 			setPost(data);
@@ -37,26 +36,25 @@ export default function PostCard({ postId }) {
 	}, [postId]);
 
   if (!post) {
-    console.log("ERROR>>empty post!!");
+    //console.log(">>empty post!!");
 		return <Loading msg="Loading..." />;
 	}
 
   function commentsPressHandler() {
-    console.log("navigate>>Comments");
-		navigation.navigate("Comments", post);
+    console.info("navigate>>Comments", post.title);
+		navigation.navigate("Comments", { postId, post });
 	}
 
   function locationPressHandler() {
-    console.log("navigate>>Map");
-		navigation.navigate("Map", post);//{ location, title }
+    console.info("navigate>>Map");
+		navigation.navigate("Map", post);
 	}
 
-	function toggleLikePressHandler() {
-		console.log("likes pressed>>");
-		toggleLike(user.uid, postId);
+	async function toggleLikePressHandler() {
+    console.info("likes pressed>>");
+    await  toggleLike(user.uid, postId);
   }
 
-console.log("post>>", post.likesCount);
 	return (
 		<View style={styles.container}>
 			<Photo uri={post.picture} />

@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useEffect } from "react";
-import { COLORS } from "../../common/constants";
+import { useEffect, useState } from "react";
+import { onChildAdded } from "firebase/database";
+
 import PostCard from "./postcard/PostCard";
-import { useState } from "react";
-import { ref, onChildAdded } from "firebase/database";
+import { COLORS } from "../../common/constants";
 
 /**
  * displays posts as FlatList
@@ -34,7 +34,7 @@ function PostsList({ listRef }) {
 		);
   }
 
-	console.debug("PostsList>>postIdArr", postIdArr.length);
+	//console.debug("PostsList>>postIdArr", postIdArr.length);
 
 	return (
 		<View

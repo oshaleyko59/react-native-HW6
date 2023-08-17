@@ -1,21 +1,29 @@
 import { useState } from "react";
-import { TextInput, View, StyleSheet } from "react-native";
-import SendBtn from "../ui/SendBtn";
-import Comment from "../../models/Comment";
-import { COLORS } from "../../common/constants";
-import useAuth from "../../hooks/useAuth";
-import saveComment from "../../utils/saveComment";
+import { TextInput, View, StyleSheet, Alert } from "react-native";
+
+import SendBtn from "../../ui/SendBtn";
+import { COLORS } from "../../../common/constants";
+import useAuth from "../../../hooks/useAuth";
+import { createComment } from "../../../utils/saveComment";
+import handleError from "../../../helpers/handleError";
 
 export default function CommentForm({postId}) {
 	const [text, setText] = useState("");
   const { user } = useAuth();
-  console.info("CommentForm>>user", user.uid);
 
-	function submitCommentHandler() {
-    const newComment = new Comment(text, user.uid);
-    saveComment(text, user.uid, postId);
-    console.info("Submit>>comment", newComment);
-    setText("");
+  async function submitCommentHandler() {
+    const content = text.trim();
+    if (content === '') {
+      Alert.alert("", "Empty comments are not allowed");
+      return;
+    }
+    try {
+    const res = await createComment(text, postId, user.uid, user.photoURL);
+    console.info("Submit>>comment", res);
+      setText("");
+    } catch (err) {
+      handleError("createComment error:", err);
+    }
 	}
 
 	return (
