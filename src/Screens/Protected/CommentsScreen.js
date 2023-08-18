@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import {
 	View,
 	StyleSheet,
+	Alert,
 	Keyboard,
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
@@ -20,42 +21,49 @@ import handleError from "../../helpers/handleError";
 export default function CommentsScreen() {
 	const route = useRoute();
 	const { post, postId } = route.params;
-  console.log("CommentsScreen>>postId", post.title);
-  	const [text, setText] = useState("");
-		const { user } = useAuth();
-  const [kbdStatus, setKbdStatus] = useState(false);
+	const [text, setText] = useState("");
+	const { user } = useAuth();
+	const [kbdStatus, setKbdStatus] = useState(false);
+	console.log("CommentsScreen>>kbdStatus", kbdStatus);
 
-   async function submitCommentHandler() {
-			if (text?.trim() === "") {
-				Alert.alert("", "Empty comments are not allowed");
-				return;
-			}
-			try {
-				const res = await createComment(text, postId, user.uid, user.photoURL);
-				console.info("Submit>>comment", res);
-				setText("");
-			} catch (err) {
-				handleError("createComment error:", err);
-			}
-  }
+	async function submitCommentHandler() {
+		if (text?.trim() === "") {
+			Alert.alert("", "Empty comments are not allowed");
+			return;
+		}
+		try {
+			const res = await createComment(text, postId, user.uid, user.photoURL);
+			console.info("Submit>>comment", res);
+			setText("");
+		} catch (err) {
+			handleError("create comment error:", err);
+		}
+	}
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<View style={styles.container}>
-				<Photo uri={post.picture} />
-				<CommentsList postId={postId} />
-				<View style={styles.inputContainer}>
-					<StyledTextInput
-						containerStyle={styles.styledInput}
-						autoCapitalize="sentences"
-						placeholder="Коментувати..."
-						onEndEditing={setText}
-						setKbdStatus={setKbdStatus}
-					/>
-					<SendBtn onPress={submitCommentHandler} />
+		<KeyboardAvoidingView
+			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			style={styles.flex}
+		>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<View style={styles.container}>
+					<View>
+            <Photo uri={post.picture} />
+          </View>
+					<CommentsList postId={postId} />
+					{/* <View style={styles.inputContainer}>
+              <StyledTextInput
+                containerStyle={styles.styledInput}
+                autoCapitalize="sentences"
+                placeholder="Коментувати..."
+                onChangeText={setText}
+                setKbdStatus={setKbdStatus}
+              />
+              <SendBtn onPress={submitCommentHandler} />
+            </View> */}
 				</View>
-			</View>
-		</TouchableWithoutFeedback>
+			</TouchableWithoutFeedback>
+		</KeyboardAvoidingView>
 	);
 }
 /*
@@ -68,21 +76,24 @@ export default function CommentsScreen() {
 				>
          */
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 12,
-		paddingTop: 16,
-		paddingHorizontal: 16,
+	flex: {
+		flex: 1,
+	},
+	container: {
+		padding: 16,
+		paddingTop: 28,
 		flex: 1,
 		backgroundColor: COLORS.mainBkg,
 	},
 
 	inputContainer: {
+		//flex: 2,
+		marginBottom: 16,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 		backgroundColor: COLORS.Gray01,
 		paddingRight: 8,
-		marginBottom: 16,
 		borderRadius: 100,
 		borderWidth: 1,
 		borderColor: COLORS.Gray02,
@@ -93,6 +104,4 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		marginBottom: 0,
 	},
-
 });
-

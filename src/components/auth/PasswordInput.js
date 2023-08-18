@@ -20,7 +20,7 @@ function ShowHideBtn({ title, onPress }) {
   );
 }
 
-export default function PasswordInput({ onEndEditing, setKbdStatus }) {
+export default function PasswordInput({ onChangeText, setKbdStatus }) {
 	const [isPasswordVisible, setPasswordVisible] = useState(false);
 
 	return (
@@ -29,7 +29,7 @@ export default function PasswordInput({ onEndEditing, setKbdStatus }) {
 				autoComplete="current-password"
 				autoCapitalize="none"
 				placeholder="Пароль"
-				onEndEditing={onEndEditing}
+				onChangeText={onChangeText}
 				secureTextEntry={!isPasswordVisible}
 				setKbdStatus={setKbdStatus}
 			/>

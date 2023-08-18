@@ -3,8 +3,9 @@ import { View, TextInput, StyleSheet } from "react-native";
 import { COLORS } from "../common/constants";
 
 export default function StyledTextInput({
-	initValue,
-	onEndEditing,
+  initValue,
+  onChangeText,
+	//onEndEditing,
 	secureTextEntry,
 	placeholder,
 	keyboardType,
@@ -14,7 +15,7 @@ export default function StyledTextInput({
 	containerStyle,
 }) {
 	const [editing, setEditing] = useState(false);
-	const [text, setText] = useState(initValue);
+	//const [text, setText] = useState(initValue);
 
 	return (
 		<View
@@ -33,7 +34,7 @@ export default function StyledTextInput({
 				placeholder={placeholder}
 				secureTextEntry={secureTextEntry}
 				value={initValue}
-				onChangeText={(value) => setText(value)}
+				onChangeText={onChangeText}
 				onFocus={() => {
 					setEditing(true);
 					setKbdStatus(true);
@@ -42,9 +43,7 @@ export default function StyledTextInput({
 					setEditing(false);
 					setKbdStatus(false);
 				}}
-				onEndEditing={() => {
-					onEndEditing(text.trim());
-				}}
+
 			/>
 		</View>
 	);

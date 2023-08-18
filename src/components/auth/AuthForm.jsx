@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import useAuth from "../../hooks/useAuth";
 import AuthButtons from "./authButtons";
 import PasswordInput from "./PasswordInput";
-import EmailInput from "../../components/auth/EmailInput";
 import StyledTextInput from "../StyledTextInput";
 import Avatar from "../Avatar";
 import { COLORS } from "../../common/constants";
@@ -14,7 +13,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 	const { user } = useAuth();
 	const [kbdStatus, setKbdStatus] = useState(false);
 	const [name, setName] = useState("");
-	const [email, setEmail] = useState(modeLogin && user?.email);
+	const [email, setEmail] = useState(modeLogin ? user?.email : "");
 	const [password, setPassword] = useState("");
 
 	const height = useMemo(() => (modeLogin ? 489 : 549), [modeLogin]);
@@ -22,21 +21,23 @@ function AuthForm({ modeLogin, onSubmit }) {
 	const marginTopCalculated = useMemo(
 		() => Dimensions.get("screen").height - height,
 		[height]
-  );
+	);
 
-  const formIsReady =
-		email?.length > 5 &&
-		password?.length >= 6 &&
-		(modeLogin || name?.length > 0);
+	const formIsReady =
+		email?.trim().length > 5 &&
+		password?.trim().length >= 6 && (modeLogin || name?.trim().length > 0);
 
-  function submitHandler() {
-    if (!formIsReady) { return; }
-
-		onSubmit({
-			name,
-			email,
-			password,
-		});
+	function submitHandler() {
+		if (!formIsReady) {
+			return;
+		}
+		const inputTrimmed = {};
+		inputTrimmed.email = email.trim().toLowerCase();
+		inputTrimmed.password = password.trim();
+		if (modeLogin) {
+			inputTrimmed.name = name.trim();
+		}
+		onSubmit(inputTrimmed);
 	}
 
 	const navigation = useNavigation();
@@ -48,7 +49,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 			navigation.replace("Login");
 		}
 	}
-console.debug("formIsReady>>", formIsReady);
+	console.debug("formIsReady>>", formIsReady);
 	return (
 		<View
 			style={[
@@ -62,28 +63,27 @@ console.debug("formIsReady>>", formIsReady);
 					  },
 			]}
 		>
-			{!modeLogin && (
-				<Avatar modeAdd={true} email={email.length > 5 ? email : false} />
-			)}
+			{!modeLogin && <Avatar modeAdd={true} email={formIsReady && email} />}
 			<Text style={styles.header}>{modeLogin ? "Увійти" : "Реєстрація"}</Text>
 			{!modeLogin && (
 				<StyledTextInput
 					autoComplete="name"
 					autoCapitalize="words"
 					placeholder="Логін"
-					onEndEditing={setName}
+					onChangeText={setName}
 					setKbdStatus={setKbdStatus}
 				/>
 			)}
-			<EmailInput
+			<StyledTextInput
 				value={modeLogin ? (user ? user.email : "") : ""}
-				onEndEditing={(value) => setEmail(value.toLowerCase())}
+				autoComplete="email"
+				autoCapitalize="none"
+				keyboardType="email-address"
+				placeholder="Адреса електронної пошти"
+				onChangeText={setEmail}
 				setKbdStatus={setKbdStatus}
 			/>
-			<PasswordInput
-				onEndEditing={setPassword}
-				setKbdStatus={setKbdStatus}
-			/>
+			<PasswordInput onChangeText={setPassword} setKbdStatus={setKbdStatus} />
 			{!kbdStatus && (
 				<AuthButtons
 					active={formIsReady}
@@ -115,3 +115,10 @@ const styles = StyleSheet.create({
 		fontFamily: "Roboto-Medium",
 	},
 });
+
+/*
+			{/* 			<EmailInput
+				value={modeLogin ? (user ? user.email : "") : ""}
+				onEndEditing={(value) => setEmail(value.toLowerCase())}
+				setKbdStatus={setKbdStatus}
+			/>  */

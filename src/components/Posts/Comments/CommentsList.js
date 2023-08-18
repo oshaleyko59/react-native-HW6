@@ -12,9 +12,10 @@ import CommentCard from "./CommentCard";
 import { COLORS } from "../../../common/constants";
 
 export default function CommentsList({ postId }) {
-	//	console.debug("CommentsList>>postId", postId);
 	const [comments, setComments] = useState([]);
-	const commentsRef = child(ref(db), "comments/" + postId);
+  const commentsRef = child(ref(db), "comments/" + postId);
+
+  console.debug("CommentsList>>#", comments.length);
 
 	useEffect(() => {
 		const unsubscribe = onChildAdded(commentsRef, (data) => {
@@ -31,28 +32,26 @@ export default function CommentsList({ postId }) {
 		//TODO: remove, no need?
 		return (
 			<View style={styles.fallbackContainer}>
-					<Text style={styles.fallbackText}>
+				<Text style={styles.fallbackText}>
 					No comments yet - start commenting!
 				</Text>
 			</View>
 		);
 	}
-	console.debug("FlatList>>comments", comments);
+
 	return (
-		<View style={styles.container}>
-				<FlatList
-					data={comments}
-					keyExtractor={(item) => item.id}
-					renderItem={({ item }) => <CommentCard {...item} />}
-				/>
-		</View>
+			<FlatList
+				data={comments}
+				keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <CommentCard {...item} />}
+			/>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		backgroundColor: COLORS.mainBkg,
+    backgroundColor: COLORS.mainBkg,//style={styles.container}
+    paddingVertical:16
 	},
 
 	fallbackContainer: {

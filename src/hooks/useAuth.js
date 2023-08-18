@@ -53,8 +53,7 @@ const useAuth = () => {
       return u;
     } catch (er) {
       console.error('Current user err>>', er);
-      Alert.alert("NO USER:", er.message);
-      return null; //FIXME: if needed here?
+      return null; 
     }
   })()
 

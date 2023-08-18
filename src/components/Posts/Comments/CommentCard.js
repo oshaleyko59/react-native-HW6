@@ -14,7 +14,7 @@ export default function CommentCard(props) {
 		<View
 			style={[
 				styles.container,
-				user.uid === authorId
+				user.uid !== authorId
 					? { flexDirection: "row" }
 					: { flexDirection: "row-reverse" },
 			]}
@@ -25,7 +25,7 @@ export default function CommentCard(props) {
 			<View
 				style={[
 					styles.contentContainer,
-					user.uid === authorId
+					user.uid !== authorId
 						? { borderTopLeftRadius: 0 }
 						: { borderTopRightRadius: 0 },
 				]}
@@ -40,7 +40,7 @@ export default function CommentCard(props) {
 const styles = StyleSheet.create({
 	container: {
 		width: "100%",
-		marginBottom: 24,
+		marginVertical: 12,
 		gap: 16,
 	},
 	avatar: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex:1,
     padding: 16,
-    backgroundColor: COLORS.Gray01,
+    backgroundColor: "red",//COLORS.Gray01,
     borderRadius: 6,
 	},
 	text: {
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 		fontSize: 11,
 		lineHeight: 18,
 		color: COLORS.inactive,
-		fontFamily: "Roboto-Regular",
-		marginBottom: 8,
+    fontFamily: "Roboto-Regular",
+    textAlign:"right"
 	},
 });
