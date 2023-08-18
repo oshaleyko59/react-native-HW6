@@ -20,9 +20,7 @@ import MainBtn from "../ui/MainBtn";
 import TrashBtn from "../ui/TrashBtn";
 import { COLORS } from "../../common/constants";
 import ImageTaker from "./ImageTaker";
-import {
-	uploadPhoto,
-} from "../../utils/upLoadPhoto";
+import { uploadPhoto } from "../../utils/upLoadPhoto";
 import useAuth from "../../hooks/useAuth";
 import Loading from "../ui/Loading";
 import savePost from "../../utils/savePost";
@@ -39,8 +37,9 @@ export default function PostForm() {
 	const [locationPermission, requestPermission] = useForegroundPermissions();
 	const [hasCameraPermission, setHasCameraPermission] = useState();
 	const [hasLocationPermission, setHasLocationPermission] = useState();
-//	const [imageURL, setImageURL] = useState(null);
-//	const [progress, setProgress] = useState(null);
+
+  const newPostReady = !!title && !!place && !!location && !!picture;
+  const postNotEmpty = !!picture || title?.trim() || place?.trim();
 
 	function clearPost() {
 		setPicture(null);
@@ -101,7 +100,7 @@ export default function PostForm() {
 	}
 
 	async function publishHandler() {
-		const newPostReady = !!title && !!place && !!location && !!picture;
+		//const newPostReady = !!title && !!place && !!location && !!picture;
 		if (!newPostReady) {
 			Alert.alert(
 				"New post not completed!",
@@ -111,7 +110,7 @@ export default function PostForm() {
 		}
 
 		const url = await uploadPhoto(picture);
-    savePost(user.uid, title, place, location, url);
+		savePost(user.uid, title, place, location, url);
 		clearPost();
 		navigation.navigate("Posts");
 	}
@@ -154,10 +153,18 @@ export default function PostForm() {
 						/>
 					</View>
 					<View style={styles.mainBtnContainer}>
-						<MainBtn title={"Опубліковати"} onPress={publishHandler} />
+						<MainBtn
+							active={newPostReady}
+							title={"Опубліковати"}
+							onPress={publishHandler}
+						/>
 					</View>
 				</View>
-				<TrashBtn style={styles.positionTrash} onPress={toTrashHandler} />
+				<TrashBtn
+					active={postNotEmpty}
+					style={styles.positionTrash}
+					onPress={toTrashHandler}
+				/>
 			</View>
 		</ScrollView>
 	);

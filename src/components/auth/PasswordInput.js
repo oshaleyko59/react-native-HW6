@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, StyleSheet, Pressable, Text } from "react-native";
-import StyledTextInput from "./StyledTextInput";
+import StyledTextInput from "../StyledTextInput";
 import { COLORS } from "../../common/constants";
 
 //button to show/hide password

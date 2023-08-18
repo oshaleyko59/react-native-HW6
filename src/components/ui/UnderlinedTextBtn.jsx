@@ -1,6 +1,8 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 
-export default function UnderlinedTextBtn({ title, onPress, textStyle }) {
+import { COLORS } from "../../common/constants";
+
+export default function UnderlinedTextBtn({ title, onPress}) {
 	return (
 		<Pressable
 			onPress={onPress}
@@ -8,7 +10,7 @@ export default function UnderlinedTextBtn({ title, onPress, textStyle }) {
 			style={({ pressed }) => [pressed && styles.pressed]}
 		>
 			<View>
-				<Text style={[textStyle, styles.underlined]}>{title}</Text>
+				<Text style={[styles.text]}>{title}</Text>
 			</View>
 		</Pressable>
 	);
@@ -19,8 +21,12 @@ const styles = StyleSheet.create({
 		opacity: 0.5,
 	},
 
-	underlined: {
-		textDecorationStyle: "solid",
+	text: {
+		color: COLORS.linkText,
+		fontSize: 16,
+		lineHeight: 19,
+    fontFamily: "Roboto-Regular",
+    textDecorationStyle: "solid",
 		textDecorationLine: "underline",
 	},
 });

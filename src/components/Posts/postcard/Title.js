@@ -1,4 +1,3 @@
-import { db } from "../../../firebase/config";
 import { StyleSheet, View, Text } from "react-native";
 
 import { COLORS } from "../../../common/constants";
@@ -14,7 +13,7 @@ return (
 
 
 const styles = StyleSheet.create({
-	titleContainer: { marginBottom: 8 },
+	titleContainer: { marginVertical: 4 },
 	titleStyle: {
 		fontSize: 16,
 		lineHeight: 19,

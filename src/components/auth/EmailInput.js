@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import StyledTextInput from "./StyledTextInput";
+import StyledTextInput from "../StyledTextInput";
 
 export default function EmailInput({ onEndEditing, setKbdStatus, value }) {
 	return (

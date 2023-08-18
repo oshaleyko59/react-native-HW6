@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.borderGray,
 	},
 	pressed: {
-		opacity: 0.1,
+		opacity: 1, //0.1, FIXME:
 		backgroundColor: COLORS.accent,
 	},
 });

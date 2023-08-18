@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react";
-import { StyleSheet, View, Dimensions, Text, Alert } from "react-native";
+import { StyleSheet, View, Dimensions, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import useAuth from "../../hooks/useAuth";
 import AuthButtons from "./authButtons";
 import PasswordInput from "./PasswordInput";
 import EmailInput from "../../components/auth/EmailInput";
-import StyledTextInput from "../../components/auth/StyledTextInput";
+import StyledTextInput from "../StyledTextInput";
 import Avatar from "../Avatar";
 import { COLORS } from "../../common/constants";
 
@@ -22,19 +22,15 @@ function AuthForm({ modeLogin, onSubmit }) {
 	const marginTopCalculated = useMemo(
 		() => Dimensions.get("screen").height - height,
 		[height]
-	);
+  );
 
-	function submitHandler() {
-		if (
-			email.length === 0 ||
-			password.length < 6 ||
-			(!modeLogin && name.length === 0)
-		) {
-			Alert.alert(
-				"Please fill in every field and check password (it must be longer than 6 symbols"
-			);
-			return;
-		}
+  const formIsReady =
+		email?.length > 5 &&
+		password?.length >= 6 &&
+		(modeLogin || name?.length > 0);
+
+  function submitHandler() {
+    if (!formIsReady) { return; }
 
 		onSubmit({
 			name,
@@ -52,7 +48,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 			navigation.replace("Login");
 		}
 	}
-
+console.debug("formIsReady>>", formIsReady);
 	return (
 		<View
 			style={[
@@ -75,21 +71,22 @@ function AuthForm({ modeLogin, onSubmit }) {
 					autoComplete="name"
 					autoCapitalize="words"
 					placeholder="Логін"
-					onEndEditing={(value) => setName(value?.trim())}
+					onEndEditing={setName}
 					setKbdStatus={setKbdStatus}
 				/>
 			)}
 			<EmailInput
-				value={modeLogin? user? user.email : '' :''}
-				onEndEditing={(value) => setEmail(value?.trim().toLowerCase())}
+				value={modeLogin ? (user ? user.email : "") : ""}
+				onEndEditing={(value) => setEmail(value.toLowerCase())}
 				setKbdStatus={setKbdStatus}
 			/>
 			<PasswordInput
-				onEndEditing={(value) => setPassword(value?.trim())}
+				onEndEditing={setPassword}
 				setKbdStatus={setKbdStatus}
 			/>
 			{!kbdStatus && (
 				<AuthButtons
+					active={formIsReady}
 					modeIsLogin={modeLogin}
 					onSubmit={submitHandler}
 					onMove={onAlternativePress}

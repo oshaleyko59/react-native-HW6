@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 	imgContainer: {
 		width: "100%",
 		height: 240,
-		marginBottom: 8,
+		marginVertical: 4,
 		borderRadius: 8,
 		overflow: "hidden",
 		backgroundColor: "lightblue",

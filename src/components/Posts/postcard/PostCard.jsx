@@ -9,9 +9,8 @@ import toggleLike from "../../../utils/toggleLike";
 import Loading from "../../ui/Loading";
 import Title from "./Title";
 import Photo from "../Photo";
-import CommentsNumber from "./CommentsNumber";
-import LikesNumber from "./LikesNumber";
-import Place from "./Place";
+import OutlinedBtn from "../../ui/OutlinedBtn";
+import { COLORS } from "../../../common/constants";
 
 export default function PostCard({ postId }) {
   //console.info("PostCard>>", postId);
@@ -61,16 +60,25 @@ export default function PostCard({ postId }) {
 			<Title title={post.title} />
 			<View style={styles.btnsContainer}>
 				<View style={styles.btnContainerLeft}>
-					<CommentsNumber
-						commentsCount={post.commentsCount}
+					<OutlinedBtn
+						icon={"message-circle"}
 						onPress={commentsPressHandler}
-					/>
-					<LikesNumber
-						likesCount={post.likesCount}
+					>
+						{post.commentsCount}
+					</OutlinedBtn>
+					<OutlinedBtn
+						icon={"thumbs-up"}
 						onPress={toggleLikePressHandler}
-					/>
+					>
+						{post.likesCount}
+					</OutlinedBtn>
 				</View>
-				<Place text={post.place} onPress={locationPressHandler} />
+				<OutlinedBtn
+					icon={"map-pin"}
+					onPress={locationPressHandler}
+				>
+					{post.place}
+				</OutlinedBtn>
 			</View>
 		</View>
 	);
@@ -81,7 +89,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: 299,
 		flexShrink: 0,
-		marginBottom: 32,
+		marginVertical: 12,
 	},
 	btnsContainer: {
 		flexDirection: "row",

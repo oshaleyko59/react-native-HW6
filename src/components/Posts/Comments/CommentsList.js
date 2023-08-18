@@ -4,13 +4,11 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	KeyboardAvoidingView,
 } from "react-native";
 import { ref, child, onChildAdded } from "firebase/database";
 
 import { db } from "../../../firebase/config";
 import CommentCard from "./CommentCard";
-import CommentForm from "./CommentForm";
 import { COLORS } from "../../../common/constants";
 
 export default function CommentsList({ postId }) {
