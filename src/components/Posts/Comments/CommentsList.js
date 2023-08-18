@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+	FlatList,
+	StyleSheet,
+	Text,
+	View,
+	KeyboardAvoidingView,
+} from "react-native";
 import { ref, child, onChildAdded } from "firebase/database";
 
 import { db } from "../../../firebase/config";
@@ -12,12 +18,12 @@ export default function CommentsList({ postId }) {
 	const [comments, setComments] = useState([]);
 	const commentsRef = child(ref(db), "comments/" + postId);
 
-  useEffect(() => {
+	useEffect(() => {
 		const unsubscribe = onChildAdded(commentsRef, (data) => {
 			const key = data.key;
-			const item = {...data.val()};
-      item.id = key;
-      console.debug("onChildAdded>>comment text", item.text);
+			const item = { ...data.val() };
+			item.id = key;
+			console.debug("onChildAdded>>comment text", item.text);
 			setComments((state) => [...state, item]);
 		});
 		return unsubscribe; //returns Unsubcribe func
@@ -27,21 +33,20 @@ export default function CommentsList({ postId }) {
 		//TODO: remove, no need?
 		return (
 			<View style={styles.fallbackContainer}>
-				<Text style={styles.fallbackText}>
+					<Text style={styles.fallbackText}>
 					No comments yet - start commenting!
 				</Text>
 			</View>
 		);
 	}
-console.debug("FlatList>>comments", comments);
+	console.debug("FlatList>>comments", comments);
 	return (
 		<View style={styles.container}>
-			<Text>{comments.length}</Text>
-			<FlatList
-				data={comments}
-				keyExtractor={(item) => item.id}
-				renderItem={({ item }) => <CommentCard {...item} />}
-			/>
+				<FlatList
+					data={comments}
+					keyExtractor={(item) => item.id}
+					renderItem={({ item }) => <CommentCard {...item} />}
+				/>
 		</View>
 	);
 }
@@ -54,10 +59,11 @@ const styles = StyleSheet.create({
 
 	fallbackContainer: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
+	//	justifyContent: "center",
+		alignItems: "stretch",
 	},
-	fallbackText: {
+  fallbackText: {
+    marginVertical: 40,
 		fontSize: 16,
 		color: COLORS.mainText,
 	},

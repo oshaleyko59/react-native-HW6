@@ -22,7 +22,7 @@ export default async function toggleLike(uid, postId) {
 				post.likes[uid] = true;
 			}
 		}
-		//return post;
+		return post;
   });
   } catch (err) {
 		console.error("Error @toggleLike>>", err);
@@ -31,4 +31,4 @@ export default async function toggleLike(uid, postId) {
 
 //TODO: save likes to a separate collection
 //with postID as key not to download with the post every time
-//TODO: handleError 
+//TODO: handleError
