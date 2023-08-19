@@ -1,26 +1,30 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { onChildAdded } from "firebase/database";
 
+import PostCard from "./postcard/PostCard";
 import { COLORS } from "../../common/constants";
-import PostCard from "./PostCard";
 
 /**
  * displays posts as FlatList
- * @param {*} posts - list of post ids
+ * @param  listRef - list of post ids(object)
  * @returns
  */
-function PostsList({ posts }) {
-  console.log("PostsList>>posts ", posts);
-/*   		return (
-				<View style={styles.fallbackContainer}>
-					<Text style={styles.fallbackText}>
-						No posts yet - start creating some!
-					</Text>
-				</View>
-  ); */
+function PostsList({ listRef }) {
+	const [postIdArr, setPostIdArray] = useState([]);
 
+	useEffect(() => {
+		const unsubscribe = onChildAdded(listRef, (data, prevChildName) => {
+			const key = data.key;
 
+			const postId = {};
+			postId[key] = true;
+			setPostIdArray((postIdArr) => [postId, ...postIdArr]);
+		});
+		return unsubscribe; //NB! returns Unsubcribe func
+	}, []);
 
-	if (!posts || posts.length === 0) {
+	if (!postIdArr) {
 		return (
 			<View style={styles.fallbackContainer}>
 				<Text style={styles.fallbackText}>
@@ -28,9 +32,8 @@ function PostsList({ posts }) {
 				</Text>
 			</View>
 		);
-	}
-	//keyExtractor={(item) => item.id} keyExtractor={(item) => item.id}
-	//renderItem={(itemData) => <PostCard {...itemData.item}
+  }
+
 	return (
 		<View
 			style={{
@@ -39,11 +42,8 @@ function PostsList({ posts }) {
 			}}
 		>
 			<FlatList
-				data={posts}
-				renderItem={(item) => {
-					console.log("FlatList>>item", Object.keys(item.item)[0]);
-					return <PostCard postId={Object.keys(item.item)[0]} />;
-				}}
+				data={postIdArr}
+				renderItem={(item) => <PostCard postId={Object.keys(item.item)[0]} />}
 			/>
 		</View>
 	);
@@ -62,3 +62,6 @@ const styles = StyleSheet.create({
 		color: COLORS.mainText,
 	},
 });
+
+//keyExtractor={(item) => item.id} keyExtractor={(item) => item.id}
+//renderItem={(itemData) => <PostCard {...itemData.item}

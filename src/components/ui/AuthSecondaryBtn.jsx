@@ -19,10 +19,5 @@ export default function AuthSecondaryBtn({ title, hint, onPress }) {
 const styles = StyleSheet.create({
 	btn: { flexDirection: "row", justifyContent: "center", gap: 4 },
 
-	hintText: {
-		color: COLORS.linkText,
-		fontSize: 16,
-		lineHeight: 19,
-		fontFamily: "Roboto-Regular",
-	},
+
 });

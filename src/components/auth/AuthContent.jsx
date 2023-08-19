@@ -4,7 +4,8 @@ import {
 	ImageBackground,
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
-	Keyboard,
+  Keyboard,
+  Platform //081923
 } from "react-native";
 
 import AuthForm from "./AuthForm";

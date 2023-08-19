@@ -5,10 +5,11 @@ import {
 
 import { db } from "../firebase/config";
 
-export default function toggleLike(uid, postId) {
+export default async function toggleLike(uid, postId) {
+  try {
 	const postRef = ref(db, "/posts/" + postId);
-  console.debug("toggleLike>>ids", uid, postId);
-	runTransaction(postRef, (post) => {
+
+	await runTransaction(postRef, (post) => {
 		if (post) {
 			if (post.likes && post.likes[uid]) {
 				post.likesCount--;
@@ -22,5 +23,12 @@ export default function toggleLike(uid, postId) {
 			}
 		}
 		return post;
-	});
+  });
+  } catch (err) {
+		console.error("Error @toggleLike>>", err);
+	}
 }
+
+//TODO: save likes to a separate collection
+//with postID as key not to download with the post every time
+//TODO: handleError

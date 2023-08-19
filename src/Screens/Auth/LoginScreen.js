@@ -1,13 +1,11 @@
-import { useDispatch } from "react-redux";
-
-import authOperations from "../../store/auth/authOperations";
 import AuthContent from "../../components/auth/AuthContent";
+import useAuth from "../../hooks/useAuth";
 
 function LoginScreen() {
-  const dispatch = useDispatch();
+  const { onLogin} = useAuth();
 
 	async function loginHandler({ email, password }) {
-    dispatch(authOperations.login({ email, password }));
+    onLogin({ email, password }); 
 	}
 
 	return <AuthContent modeLogin={true} onAuthenticate={loginHandler} />;

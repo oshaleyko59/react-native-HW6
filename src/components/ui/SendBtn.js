@@ -1,22 +1,21 @@
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import IconButton from "./IconButton";
 import { COLORS } from "../../common/constants";
 
 export default function SendBtn({ onPress }) {
-	return (<View style={styles.container}>
+	return (
 		<IconButton
 			icon="arrow-up"
 			color={COLORS.secondaryText}
 			size={14}
-			onPress={onPress}
-		/></View>
+      onPress={onPress}
+      style={styles.container}
+		/>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		justifyContent: "center",
-		alignItems: "center",
 		backgroundColor: COLORS.accent,
 		color: COLORS.secondaryText,
 		height: 34,
@@ -24,3 +23,4 @@ const styles = StyleSheet.create({
 		borderRadius: 17,
 	},
 });
+

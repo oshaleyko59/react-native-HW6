@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	StyleSheet,
 	Alert,
+	Keyboard,Platform
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -20,14 +21,10 @@ import MainBtn from "../ui/MainBtn";
 import TrashBtn from "../ui/TrashBtn";
 import { COLORS } from "../../common/constants";
 import ImageTaker from "./ImageTaker";
-import {
-	//storePost,
-	uploadPhotoToFirebaseStorage,
-} from "../../utils/handlePosts";
-import useAuth from "../../hooks/useAuthentication";
+import { uploadPhoto } from "../../utils/upLoadPhoto";
+import useAuth from "../../hooks/useAuth";
 import Loading from "../ui/Loading";
 import savePost from "../../utils/savePost";
-//import Post from "../../models/Post";
 
 export default function PostForm() {
 	const { user } = useAuth();
@@ -41,14 +38,38 @@ export default function PostForm() {
 	const [locationPermission, requestPermission] = useForegroundPermissions();
 	const [hasCameraPermission, setHasCameraPermission] = useState();
 	const [hasLocationPermission, setHasLocationPermission] = useState();
-//	const [imageURL, setImageURL] = useState(null);
-//	const [progress, setProgress] = useState(null);
+
+	const newPostReady = !!title && !!place && !!location && !!picture;
+	const postNotEmpty = !!picture || title?.trim() || place?.trim();
+
+	//fixing quickly strange android behaiviour with Trash btn
+	const [keyboardStatus, setKeyboardStatus] = useState(false);
+	useEffect(() => {
+		if (Platform.OS === "ios") {
+			return;
+		}
+
+		const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+			setKeyboardStatus(true);
+			// cons ole.info("Keyboard Shown");
+		});
+		const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+			setKeyboardStatus(false);
+			// conso le.info("Keyboard Hidden");
+		});
+
+		return () => {
+			showSubscription.remove();
+			hideSubscription.remove();
+		};
+	}, []);
+
 
 	function clearPost() {
 		setPicture(null);
 		setPlace("");
 		setTitle("");
-		setLocation(null); //		setImageURL(null);
+		setLocation(null);
 	}
 
 	function toTrashHandler() {
@@ -103,7 +124,6 @@ export default function PostForm() {
 	}
 
 	async function publishHandler() {
-		const newPostReady = !!title && !!place && !!location && !!picture;
 		if (!newPostReady) {
 			Alert.alert(
 				"New post not completed!",
@@ -112,11 +132,8 @@ export default function PostForm() {
 			return;
 		}
 
-		const url = await uploadPhotoToFirebaseStorage(picture);
-/* 		const newPost = new Post(user.uid, title, place, location, url);
-	console.debug("Publish>>post", newPost);
-		storePost(newPost); */
-    savePost(user.uid, title, place, location, url);
+		const url = await uploadPhoto(picture);
+		savePost(user.uid, title, place, location, url);
 		clearPost();
 		navigation.navigate("Posts");
 	}
@@ -159,10 +176,16 @@ export default function PostForm() {
 						/>
 					</View>
 					<View style={styles.mainBtnContainer}>
-						<MainBtn title={"Опубліковати"} onPress={publishHandler} />
+						<MainBtn
+							active={newPostReady}
+							title={"Опубліковати"}
+							onPress={publishHandler}
+						/>
 					</View>
 				</View>
-				<TrashBtn style={styles.positionTrash} onPress={toTrashHandler} />
+				{!keyboardStatus && (
+					<TrashBtn active={postNotEmpty} onPress={toTrashHandler} />
+				)}
 			</View>
 		</ScrollView>
 	);
@@ -208,7 +231,5 @@ const styles = StyleSheet.create({
 		color: COLORS.mainText,
 	},
 	icon: { marginRight: 4 },
-	positionTrash: {
-		alignSelf: "center",
-	},
 });
+

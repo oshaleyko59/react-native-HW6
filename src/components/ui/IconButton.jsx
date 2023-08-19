@@ -1,10 +1,11 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { COLORS } from "../../common/constants";
 
-function IconButton({ icon, color, size, onPress }) {
+function IconButton({ icon, color, size, onPress, style }) {
 	return (
 		<Pressable
-			style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+			style={({ pressed }) => [styles.button, style, pressed && styles.pressed]}
 			onPress={onPress}
 		>
 			<Feather name={icon} color={color} size={size} />
@@ -16,10 +17,11 @@ export default IconButton;
 
 const styles = StyleSheet.create({
 	button: {
-	//	margin: 8,
-	//	borderRadius: 20,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	pressed: {
-		opacity: 0.7,
+    opacity: 0.5,
+    backgroundColor: COLORS.accent
 	},
 });

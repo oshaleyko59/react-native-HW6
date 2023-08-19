@@ -1,37 +1,38 @@
 import { useState } from "react";
-import { View, TextInput, StyleSheet} from "react-native";
-import { COLORS } from "../../common/constants";
+import { View, TextInput, StyleSheet } from "react-native";
+import { COLORS } from "../common/constants";
 
 export default function StyledTextInput({
-  value,
-	onEndEditing,
+  initValue,
+  onChangeText,
 	secureTextEntry,
 	placeholder,
 	keyboardType,
 	autoCapitalize,
 	autoComplete,
 	setKbdStatus,
+	containerStyle,
 }) {
 	const [editing, setEditing] = useState(false);
-	const [text, setText] = useState(value);
 
 	return (
-		<View>
+		<View
+			style={[
+				styles.container,
+				containerStyle,
+				editing && { borderColor: COLORS.accent },
+			]}
+		>
 			<TextInput
-				style={[
-					styles.input,
-					editing
-						? { borderColor: COLORS.accent }
-						: { borderColor: COLORS.borderGray },
-				]}
+				style={styles.input}
 				autoComplete={autoComplete}
-        autoCapitalize={autoCapitalize}
-        autoCorrect={false}
+				autoCapitalize={autoCapitalize}
+				autoCorrect={false}
 				keyboardType={keyboardType}
 				placeholder={placeholder}
 				secureTextEntry={secureTextEntry}
-				value={text}
-				onChangeText={(value) => setText(value)}
+				value={initValue}
+				onChangeText={onChangeText}
 				onFocus={() => {
 					setEditing(true);
 					setKbdStatus(true);
@@ -40,26 +41,27 @@ export default function StyledTextInput({
 					setEditing(false);
 					setKbdStatus(false);
 				}}
-				onEndEditing={() => {
-					onEndEditing(text);
-
-				}}
 			/>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-  input: {
-    marginBottom: 16,
+	container: {
 		height: 50,
 		padding: 16,
+		backgroundColor: COLORS.inactiveBkg,
+		marginBottom: 16,
 		borderRadius: 8,
 		borderWidth: 1,
+		borderColor: COLORS.borderGray,
+		overflow: "hidden",
+	},
+  input: {
+    width: "82%",
 		fontSize: 16,
 		fontFamily: "Roboto-Regular",
 		textDecorationLine: "none", //TODO: Android on password - how to remove?
-		backgroundColor: COLORS.inactiveBkg,
 		color: COLORS.mainText,
 	},
 });

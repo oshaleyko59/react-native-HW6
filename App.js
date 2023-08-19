@@ -1,10 +1,9 @@
 import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import "react-native-gesture-handler";
 
 import Loading from "./src/components/ui/Loading";
-import { store, persistor } from "./src/store/store";
+import { store,  } from "./src/store/store";
 import Root from "./src/components/Root";
 
 export default function App() {
@@ -20,11 +19,10 @@ export default function App() {
 
   console.info("\n\nAPP START>>"); //TODO: remove with last console stmt
 
-	return (
-		<Provider store={store}>
-			<PersistGate loading={<Loading msg="Loading..." />} persistor={persistor}>
-				<Root />
-			</PersistGate>
-		</Provider>
-	);
+  return   (
+			<Provider store={store}>
+					<Root />
+			</Provider>
+		);
 }
+

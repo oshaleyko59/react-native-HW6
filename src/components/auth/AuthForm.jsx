@@ -1,12 +1,14 @@
 import { useState, useMemo } from "react";
-import { StyleSheet, View, Dimensions, Text, Alert } from "react-native";
+import {
+  StyleSheet, View, Dimensions, Text,
+  Platform //081923
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import useAuth from "../../hooks/useAuthentication";
+import useAuth from "../../hooks/useAuth";
 import AuthButtons from "./authButtons";
 import PasswordInput from "./PasswordInput";
-import EmailInput from "../../components/auth/EmailInput";
-import StyledTextInput from "../../components/auth/StyledTextInput";
+import StyledTextInput from "../StyledTextInput";
 import Avatar from "../Avatar";
 import { COLORS } from "../../common/constants";
 
@@ -14,7 +16,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 	const { user } = useAuth();
 	const [kbdStatus, setKbdStatus] = useState(false);
 	const [name, setName] = useState("");
-	const [email, setEmail] = useState(modeLogin && user?.email);
+	const [email, setEmail] = useState(modeLogin ? user?.email : "");
 	const [password, setPassword] = useState("");
 
 	const height = useMemo(() => (modeLogin ? 489 : 549), [modeLogin]);
@@ -24,23 +26,21 @@ function AuthForm({ modeLogin, onSubmit }) {
 		[height]
 	);
 
+	const formIsReady =
+		email?.trim().length > 5 &&
+		password?.trim().length >= 6 && (modeLogin || name?.trim().length > 0);
+
 	function submitHandler() {
-		if (
-			email.length === 0 ||
-			password.length < 6 ||
-			(!modeLogin && name.length === 0)
-		) {
-			Alert.alert(
-				"Please fill in every field and check password (it must be longer than 6 symbols"
-			);
+		if (!formIsReady) {
 			return;
 		}
-
-		onSubmit({
-			name,
-			email,
-			password,
-		});
+		const inputTrimmed = {};
+		inputTrimmed.email = email.trim().toLowerCase();
+		inputTrimmed.password = password.trim();
+		if (modeLogin) {
+			inputTrimmed.name = name.trim();
+		}
+		onSubmit(inputTrimmed);
 	}
 
 	const navigation = useNavigation();
@@ -66,30 +66,30 @@ function AuthForm({ modeLogin, onSubmit }) {
 					  },
 			]}
 		>
-			{!modeLogin && (
-				<Avatar modeAdd={true} email={email.length > 5 ? email : false} />
-			)}
+			{!modeLogin && <Avatar modeAdd={true} email={formIsReady && email} />}
 			<Text style={styles.header}>{modeLogin ? "Увійти" : "Реєстрація"}</Text>
 			{!modeLogin && (
 				<StyledTextInput
 					autoComplete="name"
 					autoCapitalize="words"
 					placeholder="Логін"
-					onEndEditing={(value) => setName(value?.trim())}
+					onChangeText={setName}
 					setKbdStatus={setKbdStatus}
 				/>
 			)}
-			<EmailInput
-				value={modeLogin? user? user.email : '' :''}
-				onEndEditing={(value) => setEmail(value?.trim().toLowerCase())}
+			<StyledTextInput
+				value={modeLogin ? (user ? user.email : "") : ""}
+				autoComplete="email"
+				autoCapitalize="none"
+				keyboardType="email-address"
+				placeholder="Адреса електронної пошти"
+				onChangeText={setEmail}
 				setKbdStatus={setKbdStatus}
 			/>
-			<PasswordInput
-				onEndEditing={(value) => setPassword(value?.trim())}
-				setKbdStatus={setKbdStatus}
-			/>
+			<PasswordInput onChangeText={setPassword} setKbdStatus={setKbdStatus} />
 			{!kbdStatus && (
 				<AuthButtons
+					active={formIsReady}
 					modeIsLogin={modeLogin}
 					onSubmit={submitHandler}
 					onMove={onAlternativePress}
@@ -118,3 +118,10 @@ const styles = StyleSheet.create({
 		fontFamily: "Roboto-Medium",
 	},
 });
+
+/*
+			{/* 			<EmailInput
+				value={modeLogin ? (user ? user.email : "") : ""}
+				onEndEditing={(value) => setEmail(value.toLowerCase())}
+				setKbdStatus={setKbdStatus}
+			/>  */

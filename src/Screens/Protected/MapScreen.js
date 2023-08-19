@@ -5,8 +5,8 @@ import MapView, { PROVIDER_GOOGLE, Marker }  from 'react-native-maps';
 
 export default function MapScreen() {
   const route = useRoute();
-  const { lat, lng } = route.params.location;
-
+  const { location, place } = route.params;
+  const { lat, lng } = location;
 	return (
 		<View style={styles.container}>
 			<MapView
@@ -21,7 +21,7 @@ export default function MapScreen() {
 			>
 				<Marker
 					coordinate={{ latitude: lat, longitude: lng }}
-					title={route.params.title}
+					title={place}
 				/>
 			</MapView>
 		</View>
