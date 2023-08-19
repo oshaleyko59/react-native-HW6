@@ -29,7 +29,7 @@ export async function createComment(text, postId, authorId, avatar) {
 export async function saveCommentTrans(text, postId) {
 	const { user } = useAuth();
 	const comment = new Comment(text.user.uid, user.photoURL);
-	console.debug("saveComment>>comment", comment);
+	conso le.debug("saveComment>>comment", comment);
 
 	const postRef = ref(db, "/posts/" + postId);
 	const commentRef = child(ref(db), "posts/" + postId + "/comments");

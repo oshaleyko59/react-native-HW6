@@ -17,7 +17,6 @@
       "config":{"googleMapsApiKey":"ios.config.googleMapsApiKey"}
 		},
 		"android": {
-			"softwareKeyboardLayoutMode": "pan",
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#ffffff"

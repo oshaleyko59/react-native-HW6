@@ -16,7 +16,7 @@ function PostsList({ listRef }) {
 	useEffect(() => {
 		const unsubscribe = onChildAdded(listRef, (data, prevChildName) => {
 			const key = data.key;
-			console.debug("PostsList>>onChildAdded", key);
+
 			const postId = {};
 			postId[key] = true;
 			setPostIdArray((postIdArr) => [postId, ...postIdArr]);
@@ -33,8 +33,6 @@ function PostsList({ listRef }) {
 			</View>
 		);
   }
-
-	//console.debug("PostsList>>postIdArr", postIdArr.length);
 
 	return (
 		<View

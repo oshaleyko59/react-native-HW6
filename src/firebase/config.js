@@ -29,24 +29,7 @@ export const db = getDatabase(app);
 
 
 
-//import { getFirestore } from "firebase/firestore"
-//import { collection, addDoc } from "firebase/firestore";
-
 //const API_KEY = process.env.EXPO_PUBLIC_API_KEY; //NB! it's safe Google says
 
-//export const dbFirestore = getFirestore(app);
-/* export async function testDb() {
- console.log("testDb>>", typeof db);
-try {
-	const docRef = await addDoc(collection(db, "users"), {
-		first: "Ada",
-		last: "Lovelace",
-		born: 1815,
-	});
-	console.log("Document written with ID: ", docRef.id);
-} catch (e) {
-	console.error("Error adding document: ", e);
-}
-} */
 
 

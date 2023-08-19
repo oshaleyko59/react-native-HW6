@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
 import {
 	View,
@@ -6,11 +6,8 @@ import {
 	TextInput,
 	StyleSheet,
 	Alert,
-	Keyboard,
-	KeyboardAvoidingView,
-	TouchableWithoutFeedback,
+	Keyboard, Platform
 } from "react-native";
-//FIXME: import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import useAuth from "../../hooks/useAuth";
 import CommentsList from "../../components/Posts/Comments/CommentsList";
@@ -19,15 +16,14 @@ import Photo from "../../components/Posts/Photo";
 import SendBtn from "../../components/ui/SendBtn";
 import { createComment } from "../../utils/createComment";
 import handleError from "../../helpers/handleError";
+import KeyboardSpacer from "../../components/KeyboardSpacer";
 
 export default function CommentsScreen() {
 	const route = useRoute();
 	const { post, postId } = route.params;
 	const [text, setText] = useState("");
 	const { user } = useAuth();
-	const [kbdStatus, setKbdStatus] = useState(false);
 	const [editing, setEditing] = useState(false);
-	console.log("CommentsScreen>>kbdStatus", kbdStatus, text);
 
 	async function submitCommentHandler() {
 		const comment = text?.trim();
@@ -39,7 +35,8 @@ export default function CommentsScreen() {
 
 		try {
 			await createComment(comment, postId, user.uid, user.photoURL);
-			setText("");
+      setText("");
+      Keyboard.dismiss();
 		} catch (err) {
 			handleError("create comment error:", err);
 		}
@@ -66,17 +63,15 @@ export default function CommentsScreen() {
 						onChangeText={setText}
 						onFocus={() => {
 							setEditing(true);
-							setKbdStatus(true);
 						}}
 						onBlur={() => {
 							setEditing(false);
-							setKbdStatus(false);
 						}}
 						style={styles.input}
 					/>
 					<SendBtn onPress={submitCommentHandler} />
-				</View>
-				{/* <KeyboardSpacer /> */}
+        </View>
+        {(Platform.OS === "ios") && <KeyboardSpacer />}
 			</View>
 		</SafeAreaView>
 	);
@@ -85,7 +80,6 @@ export default function CommentsScreen() {
 const styles = StyleSheet.create({
 	inner: {
 		flex: 1,
-	//	justifyContent: "flex-end",
 		backgroundColor: COLORS.mainBkg,
 		padding: 16,
 		paddingTop: 28,
@@ -94,7 +88,7 @@ const styles = StyleSheet.create({
 	inputContainer: {
 		height: 50,
 		padding: 16,
-		marginTop: 16,
+    marginTop: 16,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
@@ -107,56 +101,9 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		width: "85%",
+		alignSelf: "center",
 		backgroundColor: COLORS.Gray01,
+		paddingTop: 0,
 	},
 });
 
-/* 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			style={{ flex: 1 }}
-		>
-			<SafeAreaView style={{ flex: 1 }}>
-				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					<View style={styles.inner}>
-						<Photo uri={post.picture} />
-						<CommentsList postId={postId} />
-						<View
-							style={[
-								styles.inputContainer,
-								editing && { borderColor: COLORS.accent },
-							]}
-						>
-							<TextInput
-								multiline
-								autoCapitalize="sentences"
-								placeholder="Коментувати..."
-								value={text}
-								onChangeText={setText}
-								onFocus={() => {
-									setEditing(true);
-									setKbdStatus(true);
-								}}
-								onBlur={() => {
-									setEditing(false);
-									setKbdStatus(false);
-								}}
-								style={styles.input}
-							/>
-							<SendBtn onPress={submitCommentHandler} />
-						</View>
-					</View>
-				</TouchableWithoutFeedback>
-			</SafeAreaView>
-		</KeyboardAvoidingView>
-	); */
-
-/*
-<KeyboardAvoidingView
-					behavior={Platform.OS === "ios" ? "padding" : "height"}
-					style={[
-						{flex: 1},
-						Platform.OS === "ios" && { justifyContent: "flex-end" },
-					]}
-				>
-  */

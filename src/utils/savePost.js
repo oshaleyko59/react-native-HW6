@@ -17,9 +17,10 @@ export default async function savePost(authorId, title, place, location, url) {
     updates["/users/" + authorId + "/posts/" + newPostKey] = true;
     updates["/strip/" + newPostKey] = true;
 
-		//console.log("savePost>>id", newPostKey);
+
 		await update(ref(db), updates);
 		//TODO: return Promise and move error handling to outer function
+    
 	} catch (err) {
 		console.error("Error @savePost>>", err);
 	}

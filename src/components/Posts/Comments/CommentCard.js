@@ -8,8 +8,6 @@ export default function CommentCard(props) {
   const { user } = useAuth();
   const { authorId, avatar, dtCreated, text } = props;
 
-  //console.log("CommentCard>>text", text);
-
 	return (
 		<View
 			style={[

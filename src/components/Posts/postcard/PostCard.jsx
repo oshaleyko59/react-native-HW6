@@ -10,10 +10,8 @@ import Loading from "../../ui/Loading";
 import Title from "./Title";
 import Photo from "../Photo";
 import OutlinedBtn from "../../ui/OutlinedBtn";
-import { COLORS } from "../../../common/constants";
 
 export default function PostCard({ postId }) {
-  //console.info("PostCard>>", postId);
 
 	const navigation = useNavigation();
 	const { user } = useAuth();
@@ -24,33 +22,24 @@ export default function PostCard({ postId }) {
 	useEffect(() => {
 		const unsubscribe = onValue(postRef, (snapshot) => {
 			const data = snapshot.val();
-			console.debug(
-				"PostCard>>useEffect>>#comments",
-				data.commentsCount,
-				data.title
-			);
 			setPost(data);
     });
     return unsubscribe;
 	}, [postId]);
 
   if (!post) {
-    //console.log(">>empty post!!");
 		return <Loading msg="Loading..." />;
 	}
 
   function commentsPressHandler() {
-    console.info("navigate>>Comments", post.title);
 		navigation.navigate("Comments", { postId, post });
 	}
 
   function locationPressHandler() {
-    console.info("navigate>>Map");
 		navigation.navigate("Map", post);
 	}
 
 	async function toggleLikePressHandler() {
-    console.info("likes pressed>>");
     await  toggleLike(user.uid, postId);
   }
 

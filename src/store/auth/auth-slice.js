@@ -9,7 +9,6 @@ const authSlice = createSlice({
 	initialState,
 	reducers: {
 		setIsAuthenticated(state, { payload }) {
-			console.debug("setIsAuthenticated>> payload", payload);
 			return { isAuthenticated: payload };
 		},
 	},

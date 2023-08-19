@@ -8,7 +8,7 @@ import { db } from "../firebase/config";
 export default async function toggleLike(uid, postId) {
   try {
 	const postRef = ref(db, "/posts/" + postId);
- // console.debug("toggleLike>>ids", uid, postId);
+
 	await runTransaction(postRef, (post) => {
 		if (post) {
 			if (post.likes && post.likes[uid]) {

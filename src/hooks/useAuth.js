@@ -94,7 +94,6 @@ const useAuth = () => {
 	const onLogout = async () => {
 		try {
 			await signOut(auth);
-			console.log("logout>>");
 		} catch (error) {
 			handleError("logout/>>error", error);
 		}
