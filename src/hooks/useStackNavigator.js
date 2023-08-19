@@ -80,7 +80,7 @@ function ProtectedStack() {
 }
 
 export function useStackNavigator() {
-  function getStackNavigator() {
+	function getStackNavigator() {
 		const { onLogout, isAuthenticated, setAuthed } = useAuth();
 		useEffect(() => {
 			onAuthStateChanged(auth, (user) => {
@@ -88,15 +88,12 @@ export function useStackNavigator() {
 					// User is signed in, see docs for a list of available properties
 					// https://firebase.google.com/docs/reference/js/auth.user
 					const uid = user.uid;
-					console.debug(
-						"getStackNavigator>>onAuthStateChanged>>",
-						auth.currentUser?.email
-					);
-          setAuthed(true);
+					console.debug("getStackNavigator>>onAuthStateChanged>>");
+					setAuthed(true);
 				} else {
 					// User is signed out
 					console.debug("getStackNavigator>>onAuthStateChanged>>no user");
-				  setAuthed(false);
+					setAuthed(false);
 				}
 			});
 		}, []);
@@ -104,8 +101,7 @@ export function useStackNavigator() {
 		console.info("getStackNavigator>>isAuthenticated", isAuthenticated);
 		return isAuthenticated === null ? (
 			<Loading msg="Checking authentication status..." />
-		) :
-    isAuthenticated ? (
+		) : isAuthenticated ? (
 			<ProtectedStack onLogout={onLogout} />
 		) : (
 			<AuthStack />

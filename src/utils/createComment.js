@@ -17,7 +17,7 @@ export async function createComment(text, postId, authorId, avatar) {
 	const updates = {};
 	updates[`comments/${postId}/${newCommentKey}`] = comment;
 	updates[`posts/${postId}/commentsCount`] = increment(1);
-	return update(ref(db), updates);
+	return update(ref(db), updates); //NB! returns a Promise
 }
 
 /* *

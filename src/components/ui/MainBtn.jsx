@@ -6,8 +6,12 @@ export default function MainBtn({ active,title, onPress }) {
 	return (
 		<Pressable
 			onPress={onPress}
-			android_ripple={{ color: "orangered" }}
-			style={({ pressed }) => [styles.btn, active&& styles.active, active && pressed && styles.pressed]}
+			android_ripple={{ color: COLORS.accent }}
+			style={({ pressed }) => [
+				styles.btn,
+				active && styles.active,
+				active && pressed && styles.pressed,
+			]}
 		>
 			<View>
 				<Text style={styles.btnTitle}>{title}</Text>
@@ -15,7 +19,7 @@ export default function MainBtn({ active,title, onPress }) {
 		</Pressable>
 	);
 }
-
+//TODO: fix overflow for android ripple
 const styles = StyleSheet.create({
 	btn: {
 		height: 51,
@@ -25,7 +29,8 @@ const styles = StyleSheet.create({
 		padding: 16,
 		color: COLORS.secondaryText,
 		backgroundColor: COLORS.accent,
-		opacity: 0.5,
+    opacity: 0.5,
+    overflow:"hidden"
 	},
   active: {
     opacity: 1

@@ -6,7 +6,6 @@ function IconButton({ icon, color, size, onPress, style }) {
 	return (
 		<Pressable
 			style={({ pressed }) => [styles.button, style, pressed && styles.pressed]}
-			android_ripple={{ color: COLORS.accent }}
 			onPress={onPress}
 		>
 			<Feather name={icon} color={color} size={size} />
@@ -20,13 +19,6 @@ const styles = StyleSheet.create({
 	button: {
 		justifyContent: "center",
 		alignItems: "center",
-		//	margin: 8,
-		//	borderRadius: 20,
-		/* 		padding: 8,
-		justifyContent: "center",
-		alignItems: "center",
-    //  FIXME: android_ripple={{ color: "orangered" }}
-     */
 	},
 	pressed: {
     opacity: 0.5,

@@ -26,7 +26,6 @@ export default function CommentsList({ postId }) {
 	}, []);
 
 	if (!comments || comments.length === 0) {
-		//TODO: remove, no need?
 		return (
 			<View style={styles.fallbackContainer}>
 				<Text style={styles.fallbackText}>
@@ -36,13 +35,11 @@ export default function CommentsList({ postId }) {
 		);
 	}
 	/* 		<FlatList
-			data={comments}
-			keyExtractor={(item) => item.id}
-			renderItem={({ item }) => <CommentCard {...item} />}
+...
 			contentContainerStyle={{
 				flexGrow: 1,
 			}}
-		/> */
+		/> *///contentContainerStyle={{ justifyContent: "flex-end", flex: 1 }}
 	return (
 		<View
 			style={{
@@ -62,21 +59,21 @@ export default function CommentsList({ postId }) {
 		</View>
 	);
 }
-//contentContainerStyle={{ justifyContent: "flex-end", flex: 1 }}
+
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: COLORS.mainBkg, //style={styles.container}
+		backgroundColor: COLORS.mainBkg,
 		paddingVertical: 16,
 	},
 
 	fallbackContainer: {
 		flex: 1,
 		//	justifyContent: "center",
-		alignItems: "stretch",
+		alignItems: "center",
 	},
 	fallbackText: {
 		marginVertical: 40,
-		fontSize: 16,
+		fontSize: 20,
 		color: COLORS.mainText,
 	},
 });

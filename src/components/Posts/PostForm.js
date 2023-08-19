@@ -45,7 +45,7 @@ export default function PostForm() {
 		setPicture(null);
 		setPlace("");
 		setTitle("");
-		setLocation(null); //		setImageURL(null);
+		setLocation(null);
 	}
 
 	function toTrashHandler() {
@@ -100,7 +100,6 @@ export default function PostForm() {
 	}
 
 	async function publishHandler() {
-		//const newPostReady = !!title && !!place && !!location && !!picture;
 		if (!newPostReady) {
 			Alert.alert(
 				"New post not completed!",

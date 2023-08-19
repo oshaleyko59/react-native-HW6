@@ -10,7 +10,7 @@ export const store = configureStore({
 
 
 
-/* FIXME:
+/* nothing to store there with firebase SDK
 import {
 	persistReducer,
 	persistStore,

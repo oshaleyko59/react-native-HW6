@@ -50,16 +50,6 @@ const useAuth = () => {
 	 * returns current user object from  or null
 	 */
   const user = auth.currentUser;
-/*     (() => {
-		//FIXME:
-		try {
-			const u = auth.currentUser;
-			return u;
-		} catch (er) {
-			console.error("Current user err>>", er);
-			return null;
-		}
-	})(); */
 
 	/**
 	 * get value isAuthenticated in store

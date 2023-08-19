@@ -11,19 +11,15 @@ export default async function savePost(authorId, title, place, location, url) {
 		const newPostKey = push(child(ref(db), "posts")).key;
 
 		// Write the new post's data simultaneously to the posts collection,
-    // the user's post list and strip (ala all/TODO recent or followed posts)
+    // the user's post list and strip (can be recent or followed posts)
 		const updates = {};
 		updates["/posts/" + newPostKey] = post;
     updates["/users/" + authorId + "/posts/" + newPostKey] = true;
     updates["/strip/" + newPostKey] = true;
 
-		console.log("savePost>>id", newPostKey);
-		//return
+		//console.log("savePost>>id", newPostKey);
 		await update(ref(db), updates);
-
-		//await set(ref(db, "posts/" + id), post);
-		//
-		//TODO: add to user's posts array
+		//TODO: return Promise and move error handling to outer function
 	} catch (err) {
 		console.error("Error @savePost>>", err);
 	}

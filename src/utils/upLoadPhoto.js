@@ -24,7 +24,7 @@ export async function uploadPhoto(photo) {
 	}
 }
 
-/* TODO: monitor progress ???
+/* TODO: option to monitor progress ???
 //  const uploadTask = uploadBytesResumable(refImage, file);
 	// Listen for state changes, errors, and completion of the upload.
 		uploadTask.on(

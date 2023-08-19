@@ -7,7 +7,7 @@ import { COLORS } from "../../common/constants";
 
 /**
  * displays posts as FlatList
- * @param  listRef - list of post ids(object) //TODO: object with posts (need unigue keys under any circumstances)
+ * @param  listRef - list of post ids(object)
  * @returns
  */
 function PostsList({ listRef }) {
@@ -21,7 +21,7 @@ function PostsList({ listRef }) {
 			postId[key] = true;
 			setPostIdArray((postIdArr) => [postId, ...postIdArr]);
 		});
-		return unsubscribe; //returns Unsubcribe func
+		return unsubscribe; //NB! returns Unsubcribe func
 	}, []);
 
 	if (!postIdArr) {
