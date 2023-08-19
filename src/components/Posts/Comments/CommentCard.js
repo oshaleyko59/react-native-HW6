@@ -8,7 +8,7 @@ export default function CommentCard(props) {
   const { user } = useAuth();
   const { authorId, avatar, dtCreated, text } = props;
 
-  console.log("CommentCard>>text", text);
+  //console.log("CommentCard>>text", text);
 
 	return (
 		<View
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex:1,
     padding: 16,
-    backgroundColor: "red",//COLORS.Gray01,
+    backgroundColor: COLORS.Gray01,
     borderRadius: 6,
 	},
 	text: {

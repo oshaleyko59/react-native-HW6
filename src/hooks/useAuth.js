@@ -4,7 +4,6 @@ import {
 	signInWithEmailAndPassword,
 	updateProfile,
 	signOut,
-	AuthErrorCodes,
 } from "firebase/auth";
 import md5 from "md5";
 
@@ -16,12 +15,10 @@ import transformErrorMsg from "../helpers/transformErrorMessage";
 
 const updateUserProfile = async (name, email) => {
 	const user = auth.currentUser;
-	//if (user) {
 		const gravatarUrl = `https://www.gravatar.com/avatar/${md5(
 			email
 		)}?d=wavatar`;
 		return updateProfile(user, { displayName: name, photoURL: gravatarUrl });
-	//}
 };
 
 async function authenticate(mode, userData) {
@@ -45,24 +42,30 @@ async function authenticate(mode, userData) {
 }
 
 const useAuth = () => {
-	const dispatch = useDispatch();
-	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); //!!auth.currentUser;
-  const user = (() => {
-    try {
-      const u = auth.currentUser;
-      return u;
-    } catch (er) {
-      console.error('Current user err>>', er);
-      return null; 
-    }
-  })()
+  const dispatch = useDispatch();
 
 	/**
 	 * get user
 	 * @params none
-   * returns current user object from  or null
+	 * returns current user object from  or null
 	 */
-//FIXME:
+  const user = auth.currentUser;
+/*     (() => {
+		//FIXME:
+		try {
+			const u = auth.currentUser;
+			return u;
+		} catch (er) {
+			console.error("Current user err>>", er);
+			return null;
+		}
+	})(); */
+
+	/**
+	 * get value isAuthenticated in store
+	 * @params payload = true/false
+	 */
+	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
 	/**
 	 * set value isAuthenticated in store
@@ -78,7 +81,7 @@ const useAuth = () => {
 		try {
 			await authenticate("register", userData);
 		} catch (error) {
-      handleError("Register error", error); //throw new Error(error);
+			handleError("Register error", error);
 		}
 	};
 
@@ -90,7 +93,7 @@ const useAuth = () => {
 		try {
 			await authenticate("login", userData);
 		} catch (error) {
-			handleError("Login error", error); //throw new Error(error);
+			handleError("Login error", error);
 		}
 	};
 
@@ -103,9 +106,7 @@ const useAuth = () => {
 			await signOut(auth);
 			console.log("logout>>");
 		} catch (error) {
-			//const msg = transformErrorMsg(error);
-			//throw new Error(error);
-			handleError("logout/>>error", error); //
+			handleError("logout/>>error", error);
 		}
 	};
 

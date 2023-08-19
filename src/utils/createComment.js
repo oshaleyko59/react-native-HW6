@@ -11,8 +11,6 @@ import Comment from "../models/Comment";
  */
 export async function createComment(text, postId, authorId, avatar) {
 	const comment = new Comment(text, authorId, avatar);
-	console.debug("saveComment>>comment", comment);
-
 	//commentsCountRef
 	const commentRef = child(ref(db), "comments/" + postId);
 	const newCommentKey = push(commentRef).key;

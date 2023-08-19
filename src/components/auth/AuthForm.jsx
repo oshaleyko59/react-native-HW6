@@ -49,7 +49,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 			navigation.replace("Login");
 		}
 	}
-	console.debug("formIsReady>>", formIsReady);
+	
 	return (
 		<View
 			style={[

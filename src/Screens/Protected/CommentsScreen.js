@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import {
 	View,
+	SafeAreaView,
+	TextInput,
 	StyleSheet,
 	Alert,
 	Keyboard,
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
 } from "react-native";
+//FIXME: import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import useAuth from "../../hooks/useAuth";
-import StyledTextInput from "../../components/StyledTextInput";
 import CommentsList from "../../components/Posts/Comments/CommentsList";
 import { COLORS } from "../../common/constants";
 import Photo from "../../components/Posts/Photo";
@@ -24,16 +26,19 @@ export default function CommentsScreen() {
 	const [text, setText] = useState("");
 	const { user } = useAuth();
 	const [kbdStatus, setKbdStatus] = useState(false);
-	console.log("CommentsScreen>>kbdStatus", kbdStatus);
+	const [editing, setEditing] = useState(false);
+	console.log("CommentsScreen>>kbdStatus", kbdStatus, text);
 
 	async function submitCommentHandler() {
-		if (text?.trim() === "") {
+		const comment = text?.trim();
+
+		if (!comment) {
 			Alert.alert("", "Empty comments are not allowed");
 			return;
 		}
+
 		try {
-			const res = await createComment(text, postId, user.uid, user.photoURL);
-			console.info("Submit>>comment", res);
+			await createComment(comment, postId, user.uid, user.photoURL);
 			setText("");
 		} catch (err) {
 			handleError("create comment error:", err);
@@ -41,54 +46,55 @@ export default function CommentsScreen() {
 	}
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			style={styles.flex}
-		>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-				<View style={styles.container}>
-					<View>
-            <Photo uri={post.picture} />
-          </View>
-					<CommentsList postId={postId} />
-					{/* <View style={styles.inputContainer}>
-              <StyledTextInput
-                containerStyle={styles.styledInput}
-                autoCapitalize="sentences"
-                placeholder="Коментувати..."
-                onChangeText={setText}
-                setKbdStatus={setKbdStatus}
-              />
-              <SendBtn onPress={submitCommentHandler} />
-            </View> */}
-				</View>
-			</TouchableWithoutFeedback>
-		</KeyboardAvoidingView>
-	);
-}
-/*
-<KeyboardAvoidingView
-					behavior={Platform.OS === "ios" ? "padding" : "height"}
+		<SafeAreaView style={{ flex: 1 }}>
+			<View style={styles.inner}>
+				<Photo uri={post.picture} />
+				<CommentsList postId={postId} />
+				<View
 					style={[
-						styles.flex,
-						Platform.OS === "ios" && { justifyContent: "flex-end" },
+						styles.inputContainer,
+						editing && { borderColor: COLORS.accent },
 					]}
 				>
-         */
+					<TextInput
+						multiline
+						maxLength={300}
+						inputMode="text"
+						autoCapitalize="sentences"
+						placeholder="Коментувати..."
+						value={text}
+						onChangeText={setText}
+						onFocus={() => {
+							setEditing(true);
+							setKbdStatus(true);
+						}}
+						onBlur={() => {
+							setEditing(false);
+							setKbdStatus(false);
+						}}
+						style={styles.input}
+					/>
+					<SendBtn onPress={submitCommentHandler} />
+				</View>
+				{/* <KeyboardSpacer /> */}
+			</View>
+		</SafeAreaView>
+	);
+}
+//{Platform.OS === "ios" && }
 const styles = StyleSheet.create({
-	flex: {
+	inner: {
 		flex: 1,
-	},
-	container: {
+	//	justifyContent: "flex-end",
+		backgroundColor: COLORS.mainBkg,
 		padding: 16,
 		paddingTop: 28,
-		flex: 1,
-		backgroundColor: COLORS.mainBkg,
 	},
 
 	inputContainer: {
-		//flex: 2,
-		marginBottom: 16,
+		height: 50,
+		padding: 16,
+		marginTop: 16,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
@@ -99,9 +105,58 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.Gray02,
 		overflow: "hidden",
 	},
-	styledInput: {
-		borderRadius: 100,
-		borderWidth: 0,
-		marginBottom: 0,
+	input: {
+		width: "85%",
+		backgroundColor: COLORS.Gray01,
 	},
 });
+
+/* 	return (
+		<KeyboardAvoidingView
+			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			style={{ flex: 1 }}
+		>
+			<SafeAreaView style={{ flex: 1 }}>
+				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					<View style={styles.inner}>
+						<Photo uri={post.picture} />
+						<CommentsList postId={postId} />
+						<View
+							style={[
+								styles.inputContainer,
+								editing && { borderColor: COLORS.accent },
+							]}
+						>
+							<TextInput
+								multiline
+								autoCapitalize="sentences"
+								placeholder="Коментувати..."
+								value={text}
+								onChangeText={setText}
+								onFocus={() => {
+									setEditing(true);
+									setKbdStatus(true);
+								}}
+								onBlur={() => {
+									setEditing(false);
+									setKbdStatus(false);
+								}}
+								style={styles.input}
+							/>
+							<SendBtn onPress={submitCommentHandler} />
+						</View>
+					</View>
+				</TouchableWithoutFeedback>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
+	); */
+
+/*
+<KeyboardAvoidingView
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					style={[
+						{flex: 1},
+						Platform.OS === "ios" && { justifyContent: "flex-end" },
+					]}
+				>
+  */

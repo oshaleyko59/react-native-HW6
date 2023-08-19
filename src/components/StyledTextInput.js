@@ -5,7 +5,6 @@ import { COLORS } from "../common/constants";
 export default function StyledTextInput({
   initValue,
   onChangeText,
-	//onEndEditing,
 	secureTextEntry,
 	placeholder,
 	keyboardType,
@@ -15,7 +14,6 @@ export default function StyledTextInput({
 	containerStyle,
 }) {
 	const [editing, setEditing] = useState(false);
-	//const [text, setText] = useState(initValue);
 
 	return (
 		<View
@@ -43,7 +41,6 @@ export default function StyledTextInput({
 					setEditing(false);
 					setKbdStatus(false);
 				}}
-
 			/>
 		</View>
 	);
@@ -60,7 +57,8 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.borderGray,
 		overflow: "hidden",
 	},
-	input: {
+  input: {
+    width: "82%",
 		fontSize: 16,
 		fontFamily: "Roboto-Regular",
 		textDecorationLine: "none", //TODO: Android on password - how to remove?
