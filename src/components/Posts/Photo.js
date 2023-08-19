@@ -19,3 +19,6 @@ const styles = StyleSheet.create({
 	},
 	img: { width: "100%", height: 240 },
 });
+
+//TODO: react-native-fast-image try this package
+

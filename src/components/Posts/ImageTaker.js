@@ -1,30 +1,11 @@
-import { useState, useRef, useEffect } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { useRef } from "react";
+import { View, Image, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 
-//import Loading from "../ui/Loading";
 import CameraBtn from "../ui/CameraBtn";
 
 export default function ImageTaker({ picture, onTakePicture }) {
-	//const [hasCameraPermission, setHasCameraPermission] = useState();
 	const cameraRef = useRef();
-
-/* 	useEffect(() => {
-		(async () => {
-			const cameraPermission = await Camera.requestCameraPermissionsAsync();
-			setHasCameraPermission(cameraPermission.status === "granted");
-		})();
-	}, []);
-
-	if (hasCameraPermission === undefined) {
-		return <Loading msg="Requesting permissions..." />;
-	} else if (!hasCameraPermission) {
-		return (
-			<Text>
-				Permission for camera not granted. Please change this in settings.
-			</Text>
-		);
-	} */
 
 	async function takePhotoHandler() {
 		const options = {
@@ -45,14 +26,14 @@ export default function ImageTaker({ picture, onTakePicture }) {
 					style={styles.camera}
 				/>
 			) : (
-				<Camera ref={cameraRef} ration="16:9" style={styles.camera}>
+				<Camera ref={cameraRef} style={styles.camera}>
 					<CameraBtn dark={false} onPress={takePhotoHandler} />
 				</Camera>
 			)}
 		</View>
 	);
 }
-
+//FIXME: android preview is distorted 
 const styles = StyleSheet.create({
 	container: {
 	},

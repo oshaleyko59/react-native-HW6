@@ -1,5 +1,8 @@
 import { useState, useMemo } from "react";
-import { StyleSheet, View, Dimensions, Text } from "react-native";
+import {
+  StyleSheet, View, Dimensions, Text,
+  Platform //081923
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import useAuth from "../../hooks/useAuth";
@@ -49,7 +52,7 @@ function AuthForm({ modeLogin, onSubmit }) {
 			navigation.replace("Login");
 		}
 	}
-	
+
 	return (
 		<View
 			style={[
