@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { COLORS } from "../../common/constants";
+
 import UnderlinedTextBtn from "./UnderlinedTextBtn";
 
 //secondary button on Login and Registration page (shapeless)

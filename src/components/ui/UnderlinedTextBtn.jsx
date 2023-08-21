@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 	},
 
 	text: {
-		color: COLORS.linkText,
+		color: COLORS.accent,
 		fontSize: 16,
 		lineHeight: 19,
     fontFamily: "Roboto-Regular",
