@@ -1,27 +1,36 @@
 {
-	"expo": {
-		"name": "react-native-hw",
-		"slug": "react-native-hw",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "light",
-		"splash": {
-			"image": "./assets/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": false,
-      "config":{"googleMapsApiKey":"ios.config.googleMapsApiKey"}
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			}
-		},
+  "expo": {
+    "name": "react-native-hw",
+    "slug": "react-native-hw",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "config": {
+        "googleMapsApiKey": "ios.config.googleMapsApiKey"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.oshaleyko.reactnativehw"
+    },
     "plugins": [
       [
         "expo-camera",
@@ -29,6 +38,11 @@
           "cameraPermission": "Allow react-native-hw to access your camera."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7c6825eb-1249-42ae-8d0e-851505fc7008"
+      }
+    }
   }
 }

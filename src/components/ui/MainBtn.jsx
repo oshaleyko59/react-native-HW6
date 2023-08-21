@@ -28,13 +28,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		padding: 16,
 		color: COLORS.secondaryText,
-		backgroundColor: COLORS.accent,
-    opacity: 0.5,
-    overflow:"hidden"
+		backgroundColor: COLORS.mainBkg,
+		opacity: 0.5,
+		overflow: "hidden",
 	},
-  active: {
-    opacity: 1
-  },
+	active: {
+		backgroundColor: COLORS.accent,
+		opacity: 1,
+	},
 	pressed: {
 		opacity: 0.5,
 	},

@@ -9,6 +9,6 @@ export default async function saveAuthor(id, name, avatar) {
 	try {
 		await set(ref(db, "users/" + id), author);
 	} catch (e) {
-		console.error("Error @saveAuthor>>", e);
+		console.log("Error @saveAuthor>>", e); //FIXME: handle in component
 	}
 }

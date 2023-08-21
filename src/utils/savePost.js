@@ -20,8 +20,8 @@ export default async function savePost(authorId, title, place, location, url) {
 
 		await update(ref(db), updates);
 		//TODO: return Promise and move error handling to outer function
-    
+
 	} catch (err) {
-		console.error("Error @savePost>>", err);
+		console.log("Error @savePost>>", err); //FIXME: handle in component
 	}
 }

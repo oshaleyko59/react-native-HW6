@@ -19,8 +19,8 @@ export async function uploadPhoto(photo) {
     return url;
 
 	} catch (error) {
-    console.error("ERROR>>upload", error);
-    return null;
+		console.log("ERROR>>upload", error); //FIXME: handle in component
+		return null;
 	}
 }
 

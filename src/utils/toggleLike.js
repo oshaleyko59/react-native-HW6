@@ -25,10 +25,9 @@ export default async function toggleLike(uid, postId) {
 		return post;
   });
   } catch (err) {
-		console.error("Error @toggleLike>>", err);
+		console.log("Error @toggleLike>>", err); //FIXME: handle in component
 	}
 }
 
 //TODO: save likes to a separate collection
 //with postID as key not to download with the post every time
-//TODO: handleError

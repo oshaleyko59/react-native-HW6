@@ -2,41 +2,33 @@ import {
 	StyleSheet,
 	View,
 	ImageBackground,
-	KeyboardAvoidingView,
+	Keyboard,
 	TouchableWithoutFeedback,
-  Keyboard,
-  Platform //081923
+	Platform,
 } from "react-native";
 
 import AuthForm from "./AuthForm";
-
+import KeyboardSpacer from "../KeyboardSpacer";
 import { bkgImage } from "../../common/constants";
 
 function AuthContent({ modeLogin, onAuthenticate }) {
 	function submitHandler(credentials) {
 		onAuthenticate(credentials);
 	}
-
+	//
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<View style={styles.flex}>
-				<ImageBackground
-					source={bkgImage}
-					resizeMode="cover"
-					style={styles.flex}
-				>
-					<KeyboardAvoidingView
-						behavior={Platform.OS === "ios" ? "padding" : "height"}
-						style={[
-              styles.flex,
-              (Platform.OS === "ios") &&  {justifyContent: "flex-end"},
-						]}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<View style={styles.flex}>
+					<ImageBackground
+						source={bkgImage}
+						resizeMode="cover"
+						style={styles.flex}
 					>
 						<AuthForm modeLogin={modeLogin} onSubmit={submitHandler} />
-					</KeyboardAvoidingView>
-				</ImageBackground>
-			</View>
-		</TouchableWithoutFeedback>
+						{Platform.OS === "ios" && <KeyboardSpacer />}
+					</ImageBackground>
+				</View>
+			</TouchableWithoutFeedback>
 	);
 }
 
@@ -45,7 +37,6 @@ export default AuthContent;
 const styles = StyleSheet.create({
 	flex: {
 		flex: 1,
+		justifyContent: "flex-end",
 	},
 });
-
-
