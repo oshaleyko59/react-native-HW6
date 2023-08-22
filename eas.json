@@ -1,0 +1,21 @@
+{
+  "cli": {
+    "version": ">= 4.1.2"
+  },
+  "build": {
+    "development": {
+			"developmentClient": true,
+			"distribution": "internal",
+			"env": {
+				"EXPO_PUBLIC_API_KEY": "AIzaSyDV2mQ5bRj1ddESFKMGmqtLpLxlBPlCQ_8"
+			}
+		},
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}
